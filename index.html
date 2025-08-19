@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Simple AR Web App</title>
-    <meta name="description" content="A simple marker-based AR web app that displays a 3D box">
+    <title>Custom 3D Model AR Web App</title>
+    <meta name="description" content="A custom marker-based AR web app that displays a custom 3D model">
     
     <!-- AR.js and A-Frame libraries -->
     <script src="https://aframe.io/releases/1.4.0/aframe.min.js"></script>
@@ -55,6 +55,19 @@
             display: none;
         }
         
+        .loading {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            z-index: 1000;
+            text-align: center;
+        }
+        
         @media (max-width: 768px) {
             .instructions {
                 font-size: 12px;
@@ -66,7 +79,7 @@
 <body>
     <!-- Instructions for users -->
     <div class="instructions">
-        📱 Point your camera at the <a href="marker.html" target="_blank" class="marker-link">Hiro marker</a> to see a 3D box appear!
+        📱 Point your camera at your custom marker to see your 3D model appear!
         <br>
         <small>Allow camera access when prompted. Works best in good lighting.</small>
     </div>
@@ -76,6 +89,12 @@
         <h3>Camera Access Required</h3>
         <p>Please allow camera access to use the AR features.</p>
         <button onclick="location.reload()">Try Again</button>
+    </div>
+
+    <!-- Loading message -->
+    <div id="loading-message" class="loading">
+        <h3>Loading 3D Model...</h3>
+        <p>Please wait while we load your custom model.</p>
     </div>
 
     <!-- AR Scene -->
@@ -88,30 +107,49 @@
         
         <!-- Assets -->
         <a-assets>
-            <!-- You can add custom materials or models here -->
-             <a-asset-item id="customModel" src="car.glb"></a-asset-item>
+            <!-- Load your custom 3D model - Replace with your model path -->
+            <!-- For GLTF/GLB models (Recommended) -->
+            <a-asset-item id="customModel" src="path/to/your/model.glb"></a-asset-item>
             
+            <!-- For OBJ models (Alternative) -->
+            <!-- <a-asset-item id="customModelObj" src="path/to/your/model.obj"></a-asset-item>
+            <a-asset-item id="customModelMtl" src="path/to/your/model.mtl"></a-asset-item> -->
+            
+            <!-- For textures if needed -->
+            <!-- <img id="customTexture" src="path/to/your/texture.jpg"> -->
         </a-assets>
         
-        <!-- Marker-based AR -->
+        <!-- Custom Marker-based AR -->
         <a-marker 
             type="pattern" 
-            url="custom.patt"
+            url="path/to/your/custom-marker.patt"
             markerhandler>
             
+            <!-- Method 1: GLTF/GLB Model (Recommended) -->
             <a-entity 
                 id="model"
                 gltf-model="#customModel"
-                position="0 2 0" 
+                position="0 0 0" 
                 rotation="0 0 0"
-                scale="10 10 10"
+                scale="1 1 1"
                 animation="property: rotation; to: 0 360 0; loop: true; dur: 8000"
                 shadow="cast: true; receive: true">
             </a-entity>
             
-            <!-- Optional: Add text above the box -->
+            <!-- Method 2: OBJ Model (Alternative - comment out the above and uncomment this) -->
+            <!-- <a-entity 
+                id="model"
+                obj-model="obj: #customModelObj; mtl: #customModelMtl"
+                position="0 0 0" 
+                rotation="0 0 0"
+                scale="1 1 1"
+                animation="property: rotation; to: 0 360 0; loop: true; dur: 8000"
+                shadow="cast: true; receive: true">
+            </a-entity> -->
+            
+            <!-- Optional: Add text above the model -->
             <a-text 
-                value="TEST!" 
+                value="My 3D Model!" 
                 position="0 2 0" 
                 align="center" 
                 color="#FFFFFF"
@@ -119,14 +157,14 @@
                 animation="property: rotation; to: 0 360 0; loop: true; dur: 6000">
             </a-text>
             
-            <!-- Optional: Add a plane as shadow -->
+            <!-- Optional: Add a plane as shadow/ground -->
             <a-plane 
                 position="0 0 0" 
                 rotation="-90 0 0" 
                 width="4" 
                 height="4" 
                 color="#7BC8A4" 
-                opacity="0.5"
+                opacity="0.3"
                 shadow="receive: true">
             </a-plane>
             
@@ -143,15 +181,28 @@
                 const marker = this.el;
                 
                 marker.addEventListener('markerFound', function() {
-                    console.log('Marker found!');
+                    console.log('Custom marker found! Showing 3D model...');
                     // You can add custom logic here when marker is found
+                    document.getElementById('loading-message').style.display = 'none';
                 });
                 
                 marker.addEventListener('markerLost', function() {
-                    console.log('Marker lost!');
+                    console.log('Custom marker lost! Hiding 3D model...');
                     // You can add custom logic here when marker is lost
                 });
             }
+        });
+        
+        // Handle model loading
+        document.querySelector('#customModel').addEventListener('loaded', function() {
+            console.log('3D Model loaded successfully!');
+            document.getElementById('loading-message').style.display = 'none';
+        });
+        
+        document.querySelector('#customModel').addEventListener('error', function(error) {
+            console.error('Error loading 3D model:', error);
+            document.getElementById('loading-message').innerHTML = 
+                '<h3>Error Loading Model</h3><p>Could not load the 3D model. Check the file path.</p>';
         });
         
         // Handle camera permission errors
@@ -164,6 +215,7 @@
                 // Camera access denied or error
                 console.error('Camera access error:', err);
                 document.getElementById('error-message').style.display = 'block';
+                document.getElementById('loading-message').style.display = 'none';
             });
         
         // Hide instructions after 10 seconds
@@ -173,6 +225,13 @@
                 instructions.style.opacity = '0.7';
             }
         }, 10000);
+        
+        // Hide loading message after scene is loaded
+        document.querySelector('a-scene').addEventListener('loaded', function() {
+            setTimeout(function() {
+                document.getElementById('loading-message').style.display = 'none';
+            }, 2000);
+        });
     </script>
 </body>
 </html>
