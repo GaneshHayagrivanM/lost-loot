@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hiro Marker - Simple AR Web App</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 20px;
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            text-align: center;
+        }
+        
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        .marker-image {
+            max-width: 100%;
+            height: auto;
+            border: 2px solid #333;
+            margin: 20px 0;
+        }
+        
+        .instructions {
+            background: #e8f5e8;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 20px 0;
+            border-left: 4px solid #4CAF50;
+        }
+        
+        .back-button {
+            background: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            text-decoration: none;
+            display: inline-block;
+            margin-top: 20px;
+        }
+        
+        .back-button:hover {
+            background: #45a049;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎯 Hiro Marker</h1>
+        <p>Use this marker with your AR app!</p>
+        
+        <!-- Hiro Marker SVG -->
+        <svg class="marker-image" width="400" height="400" viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg">
+            <rect width="400" height="400" fill="white"/>
+            <rect x="50" y="50" width="300" height="300" fill="black"/>
+            <rect x="100" y="100" width="200" height="200" fill="white"/>
+            
+            <!-- Hiro pattern -->
+            <rect x="150" y="125" width="25" height="25" fill="black"/>
+            <rect x="225" y="125" width="25" height="25" fill="black"/>
+            <rect x="150" y="175" width="100" height="25" fill="black"/>
+            <rect x="150" y="225" width="25" height="25" fill="black"/>
+            <rect x="225" y="225" width="25" height="25" fill="black"/>
+            <rect x="175" y="250" width="50" height="25" fill="black"/>
+        </svg>
+        
+        <div class="instructions">
+            <h3>📋 How to use:</h3>
+            <ol style="text-align: left; display: inline-block;">
+                <li>Print this marker on paper OR display it on another screen</li>
+                <li>Go back to the AR app</li>
+                <li>Point your camera at this marker</li>
+                <li>Watch the 3D box appear!</li>
+            </ol>
+        </div>
+        
+        <p><strong>💡 Tips:</strong></p>
+        <ul style="text-align: left; display: inline-block;">
+            <li>Make sure the marker is well-lit</li>
+            <li>Keep the marker flat and visible</li>
+            <li>The marker should be about 5-10cm in size for best results</li>
+            <li>Hold your device steady for better tracking</li>
+        </ul>
+        
+        <a href="index.html" class="back-button">← Back to AR App</a>
+    </div>
+</body>
+</html>

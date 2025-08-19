@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simple AR Web App</title>
+    <meta name="description" content="A simple marker-based AR web app that displays a 3D box">
+    
+    <!-- AR.js and A-Frame libraries -->
+    <script src="https://aframe.io/releases/1.4.0/aframe.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/AR-js-org/AR.js/aframe/build/aframe-ar.js"></script>
+    
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            font-family: Arial, sans-serif;
+        }
+        
+        .instructions {
+            position: fixed;
+            top: 10px;
+            left: 10px;
+            right: 10px;
+            background: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 10px;
+            border-radius: 5px;
+            z-index: 999;
+            font-size: 14px;
+            text-align: center;
+        }
+        
+        .marker-link {
+            color: #4CAF50;
+            text-decoration: none;
+        }
+        
+        .marker-link:hover {
+            text-decoration: underline;
+        }
+        
+        .error-message {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(255, 0, 0, 0.9);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            z-index: 1000;
+            text-align: center;
+            display: none;
+        }
+        
+        @media (max-width: 768px) {
+            .instructions {
+                font-size: 12px;
+                padding: 8px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Instructions for users -->
+    <div class="instructions">
+        📱 Point your camera at the <a href="marker.html" target="_blank" class="marker-link">Hiro marker</a> to see a 3D box appear!
+        <br>
+        <small>Allow camera access when prompted. Works best in good lighting.</small>
+    </div>
+    
+    <!-- Error message for camera issues -->
+    <div id="error-message" class="error-message">
+        <h3>Camera Access Required</h3>
+        <p>Please allow camera access to use the AR features.</p>
+        <button onclick="location.reload()">Try Again</button>
+    </div>
+
+    <!-- AR Scene -->
+    <a-scene 
+        embedded 
+        arjs="sourceType: webcam; debugUIEnabled: false; detectionMode: mono_and_matrix; matrixCodeType: 3x3;"
+        vr-mode-ui="enabled: false"
+        gesture-detector
+        loading-screen="enabled: false">
+        
+        <!-- Assets -->
+        <a-assets>
+            <!-- You can add custom materials or models here -->
+        </a-assets>
+        
+        <!-- Marker-based AR -->
+        <a-marker 
+            preset="hiro" 
+            markerhandler>
+            
+            <!-- 3D Box that appears on the marker -->
+            <a-box 
+                position="0 0.5 0" 
+                rotation="0 0 0"
+                scale="1 1 1"
+                material="color: #FF6B6B; metalness: 0.2; roughness: 0.8"
+                animation="property: rotation; to: 0 360 0; loop: true; dur: 4000"
+                shadow="cast: true; receive: true">
+            </a-box>
+            
+            <!-- Optional: Add text above the box -->
+            <a-text 
+                value="Hello AR!" 
+                position="0 2 0" 
+                align="center" 
+                color="#FFFFFF"
+                scale="2 2 2"
+                animation="property: rotation; to: 0 360 0; loop: true; dur: 6000">
+            </a-text>
+            
+            <!-- Optional: Add a plane as shadow -->
+            <a-plane 
+                position="0 0 0" 
+                rotation="-90 0 0" 
+                width="4" 
+                height="4" 
+                color="#7BC8A4" 
+                opacity="0.5"
+                shadow="receive: true">
+            </a-plane>
+            
+        </a-marker>
+        
+        <!-- Camera -->
+        <a-entity camera></a-entity>
+    </a-scene>
+
+    <script>
+        // Handle marker detection
+        AFRAME.registerComponent('markerhandler', {
+            init: function() {
+                const marker = this.el;
+                
+                marker.addEventListener('markerFound', function() {
+                    console.log('Marker found!');
+                    // You can add custom logic here when marker is found
+                });
+                
+                marker.addEventListener('markerLost', function() {
+                    console.log('Marker lost!');
+                    // You can add custom logic here when marker is lost
+                });
+            }
+        });
+        
+        // Handle camera permission errors
+        navigator.mediaDevices.getUserMedia({ video: true })
+            .then(function(stream) {
+                // Camera access granted
+                stream.getTracks().forEach(track => track.stop());
+            })
+            .catch(function(err) {
+                // Camera access denied or error
+                console.error('Camera access error:', err);
+                document.getElementById('error-message').style.display = 'block';
+            });
+        
+        // Hide instructions after 10 seconds
+        setTimeout(function() {
+            const instructions = document.querySelector('.instructions');
+            if (instructions) {
+                instructions.style.opacity = '0.7';
+            }
+        }, 10000);
+    </script>
+</body>
+</html>
