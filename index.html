@@ -89,6 +89,8 @@
         <!-- Assets -->
         <a-assets>
             <!-- You can add custom materials or models here -->
+             <a-asset-item id="customModel" src="car.glb"></a-asset-item>
+            
         </a-assets>
         
         <!-- Marker-based AR -->
@@ -97,15 +99,15 @@
             url="custom.patt"
             markerhandler>
             
-            <!-- 3D Box that appears on the marker -->
-            <a-box 
-                position="0 0.5 0" 
+            <a-entity 
+                id="model"
+                gltf-model="#customModel"
+                position="0 0 0" 
                 rotation="0 0 0"
-                scale="100 100 100"
-                material="color: #FF6B6B; metalness: 0.2; roughness: 0.8"
-                animation="property: rotation; to: 0 360 0; loop: true; dur: 4000"
+                scale="10 10 10"
+                animation="property: rotation; to: 0 360 0; loop: true; dur: 8000"
                 shadow="cast: true; receive: true">
-            </a-box>
+            </a-entity>
             
             <!-- Optional: Add text above the box -->
             <a-text 
