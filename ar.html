@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lost Loot - AR View</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <!-- A-Frame and AR.js -->
+    <script src="https://aframe.io/releases/1.3.0/aframe.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/AR-js-org/AR.js@3.4.0/aframe/build/aframe-ar.min.js"></script>
+</head>
+<body class="ar-page">
+    <!-- AR Scene -->
+    <a-scene
+        embedded
+        arjs="sourceType: webcam; debugUIEnabled: false; detectionMode: mono_and_matrix; matrixCodeType: 3x3;"
+        renderer="logarithmicDepthBuffer: true;"
+        vr-mode-ui="enabled: false"
+        gesture-detector
+        id="ar-scene"
+    >
+        <!-- Assets -->
+        <a-assets>
+            <!-- Placeholder for 3D models -->
+            <a-asset-item id="compass-model" src="assets/models/compass.gltf"></a-asset-item>
+            <a-asset-item id="ship-model" src="assets/models/ship.gltf"></a-asset-item>
+            <a-asset-item id="chest-model" src="assets/models/chest.gltf"></a-asset-item>
+            <a-asset-item id="skeleton-model" src="assets/models/skeleton.gltf"></a-asset-item>
+            <a-asset-item id="key-model" src="assets/models/key.gltf"></a-asset-item>
+            
+            <!-- Marker patterns -->
+            <a-marker-camera preset="hiro"></a-marker-camera>
+        </a-assets>
+        
+        <!-- Checkpoint 1: Captain's Compass -->
+        <a-marker
+            id="marker-1"
+            preset="hiro"
+            markerhandler
+            checkpoint="1"
+            raycaster="objects: .interactive"
+            cursor="fuse: false; rayOrigin: mouse"
+        >
+            <a-entity id="checkpoint-1-content" visible="false">
+                <!-- Compass minigame -->
+                <a-box
+                    id="compass-box"
+                    position="0 0.5 0"
+                    rotation="0 45 0"
+                    color="#8B4513"
+                    scale="0.5 0.5 0.5"
+                    class="interactive"
+                    animation="property: rotation; to: 0 405 0; loop: true; dur: 4000"
+                >
+                    <a-text
+                        value="Captain's Compass"
+                        position="0 1 0"
+                        align="center"
+                        color="#FFD700"
+                        scale="2 2 2"
+                    ></a-text>
+                </a-box>
+                
+                <!-- Compass needle -->
+                <a-cylinder
+                    id="compass-needle"
+                    radius="0.02"
+                    height="0.4"
+                    color="#FF0000"
+                    position="0 0.7 0"
+                    rotation="0 0 0"
+                ></a-cylinder>
+                
+                <!-- Instructions -->
+                <a-text
+                    value="Point your device north to activate the compass!"
+                    position="0 -0.5 0"
+                    align="center"
+                    color="#FFFFFF"
+                    scale="1.5 1.5 1.5"
+                ></a-text>
+            </a-entity>
+        </a-marker>
+        
+        <!-- Checkpoint 2: Kraken's Quiz -->
+        <a-marker
+            id="marker-2"
+            preset="hiro"
+            markerhandler
+            checkpoint="2"
+        >
+            <a-entity id="checkpoint-2-content" visible="false">
+                <!-- Kraken representation -->
+                <a-sphere
+                    id="kraken-head"
+                    radius="0.3"
+                    color="#4B0082"
+                    position="0 0.5 0"
+                    class="interactive"
+                >
+                    <a-text
+                        value="Kraken's Quiz"
+                        position="0 1 0"
+                        align="center"
+                        color="#FFD700"
+                        scale="2 2 2"
+                    ></a-text>
+                </a-sphere>
+                
+                <!-- Tentacles -->
+                <a-cylinder radius="0.05" height="0.8" color="#4B0082" position="0.2 0 0.2" rotation="15 0 0"></a-cylinder>
+                <a-cylinder radius="0.05" height="0.8" color="#4B0082" position="-0.2 0 0.2" rotation="-15 0 0"></a-cylinder>
+                <a-cylinder radius="0.05" height="0.8" color="#4B0082" position="0.2 0 -0.2" rotation="15 0 0"></a-cylinder>
+                <a-cylinder radius="0.05" height="0.8" color="#4B0082" position="-0.2 0 -0.2" rotation="-15 0 0"></a-cylinder>
+                
+                <!-- Quiz question display -->
+                <a-text
+                    id="quiz-question"
+                    value="What flag do pirates fly?\nA) Jolly Roger  B) Union Jack  C) Tricolor"
+                    position="0 -0.5 0"
+                    align="center"
+                    color="#FFFFFF"
+                    scale="1.2 1.2 1.2"
+                ></a-text>
+            </a-entity>
+        </a-marker>
+        
+        <!-- Checkpoint 3: Cannonball Accuracy -->
+        <a-marker
+            id="marker-3"
+            preset="hiro"
+            markerhandler
+            checkpoint="3"
+        >
+            <a-entity id="checkpoint-3-content" visible="false">
+                <!-- Cannon -->
+                <a-cylinder
+                    id="cannon"
+                    radius="0.1"
+                    height="0.6"
+                    color="#2F4F4F"
+                    rotation="0 0 90"
+                    position="0 0.3 0"
+                    class="interactive"
+                ></a-cylinder>
+                
+                <!-- Target -->
+                <a-ring
+                    id="target"
+                    radius-inner="0.1"
+                    radius-outer="0.2"
+                    color="#FF0000"
+                    position="0 0.5 -1"
+                    class="interactive"
+                ></a-ring>
+                
+                <a-text
+                    value="Cannonball Accuracy\nTap to fire!"
+                    position="0 1 0"
+                    align="center"
+                    color="#FFD700"
+                    scale="1.5 1.5 1.5"
+                ></a-text>
+            </a-entity>
+        </a-marker>
+        
+        
+        <!-- Additional markers for checkpoints 4-8 -->
+        <!-- Checkpoint 4: Treasure Chest Lock -->
+        <a-marker id="marker-4" preset="hiro" markerhandler checkpoint="4">
+            <a-entity id="checkpoint-4-content" visible="false">
+                <a-box position="0 0.5 0" color="#8B4513" scale="0.6 0.4 0.4">
+                    <a-text value="Treasure Chest Lock" position="0 1 0" align="center" color="#FFD700" scale="1.5 1.5 1.5"></a-text>
+                </a-box>
+            </a-entity>
+        </a-marker>
+        
+        <!-- Checkpoint 5: Pirate's Balance -->
+        <a-marker id="marker-5" preset="hiro" markerhandler checkpoint="5">
+            <a-entity id="checkpoint-5-content" visible="false">
+                <a-cylinder radius="0.3" height="0.1" color="#8B4513" position="0 0.5 0">
+                    <a-text value="Pirate's Balance" position="0 1 0" align="center" color="#FFD700" scale="1.5 1.5 1.5"></a-text>
+                </a-cylinder>
+            </a-entity>
+        </a-marker>
+        
+        <!-- Checkpoint 6: Skeleton Duel -->
+        <a-marker id="marker-6" preset="hiro" markerhandler checkpoint="6">
+            <a-entity id="checkpoint-6-content" visible="false">
+                <a-sphere radius="0.2" color="#F5F5DC" position="0 0.7 0">
+                    <a-text value="Skeleton Duel" position="0 1 0" align="center" color="#FFD700" scale="1.5 1.5 1.5"></a-text>
+                </a-sphere>
+                <a-cylinder radius="0.1" height="0.6" color="#F5F5DC" position="0 0.3 0"></a-cylinder>
+            </a-entity>
+        </a-marker>
+        
+        <!-- Checkpoint 7: Map Assembly -->
+        <a-marker id="marker-7" preset="hiro" markerhandler checkpoint="7">
+            <a-entity id="checkpoint-7-content" visible="false">
+                <a-plane width="0.8" height="0.6" color="#DEB887" position="0 0.5 0" rotation="-90 0 0">
+                    <a-text value="Map Assembly" position="0 0 1" align="center" color="#8B4513" scale="2 2 2"></a-text>
+                </a-plane>
+            </a-entity>
+        </a-marker>
+        
+        <!-- Checkpoint 8: The Lost Loot -->
+        <a-marker id="marker-8" preset="hiro" markerhandler checkpoint="8">
+            <a-entity id="checkpoint-8-content" visible="false">
+                <a-box position="0 0.5 0" color="#FFD700" scale="0.5 0.3 0.5">
+                    <a-text value="The Lost Loot" position="0 1 0" align="center" color="#8B4513" scale="1.5 1.5 1.5"></a-text>
+                </a-box>
+                <a-sphere radius="0.1" color="#FFD700" position="0.2 0.8 0.2"></a-sphere>
+                <a-sphere radius="0.1" color="#FFD700" position="-0.2 0.8 0.2"></a-sphere>
+                <a-sphere radius="0.1" color="#FFD700" position="0 0.8 -0.2"></a-sphere>
+            </a-entity>
+        </a-marker>
+        
+        <!-- Additional markers for other checkpoints would be defined similarly -->
+        <!-- For brevity, I'll implement the remaining markers in the JavaScript -->
+        
+        <!-- Camera -->
+        <a-entity camera></a-entity>
+    </a-scene>
+    
+    <!-- AR UI Overlay -->
+    <div class="ar-ui-overlay">
+        <header class="ar-header">
+            <button id="back-to-hud" class="back-btn">← Back to HUD</button>
+            <h2 id="ar-title">Scan a Marker</h2>
+        </header>
+        
+        <div id="ar-instructions" class="ar-instructions">
+            <p>Point your camera at an AR marker to begin the minigame</p>
+        </div>
+        
+        <!-- Minigame UI -->
+        <div id="minigame-ui" class="minigame-ui" style="display: none;">
+            <div id="minigame-content"></div>
+            <div class="minigame-controls">
+                <button id="minigame-action" class="action-btn">Action</button>
+                <button id="minigame-reset" class="reset-btn">Reset</button>
+            </div>
+        </div>
+        
+        <!-- Progress indicator -->
+        <div id="checkpoint-indicator" class="checkpoint-indicator">
+            <span id="current-checkpoint">Checkpoint: None</span>
+            <div id="progress-bar" class="progress-bar">
+                <div id="progress-fill" class="progress-fill"></div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Scripts -->
+    <script src="js/utils.js"></script>
+    <script src="js/api-client.js"></script>
+    <script src="js/game-state.js"></script>
+    <script src="js/ar-minigames.js"></script>
+    
+    <script>
+        let currentCheckpoint = null;
+        let currentMinigame = null;
+        let deviceOrientationHandler = null;
+        
+        // Initialize AR view
+        document.addEventListener('DOMContentLoaded', () => {
+            // Check if team is logged in
+            if (!GameState.isInitialized()) {
+                window.location.href = 'index.html';
+                return;
+            }
+            
+            setupEventListeners();
+            initializeMarkerHandlers();
+            requestDeviceOrientation();
+        });
+        
+        function setupEventListeners() {
+            document.getElementById('back-to-hud').addEventListener('click', () => {
+                window.location.href = 'hud.html';
+            });
+            
+            document.getElementById('minigame-action').addEventListener('click', handleMinigameAction);
+            document.getElementById('minigame-reset').addEventListener('click', resetCurrentMinigame);
+        }
+        
+        function initializeMarkerHandlers() {
+            // Register marker found/lost handlers
+            AFRAME.registerComponent('markerhandler', {
+                schema: {
+                    checkpoint: {type: 'number'}
+                },
+                
+                init: function() {
+                    this.el.addEventListener('markerFound', () => {
+                        const checkpoint = this.data.checkpoint;
+                        console.log(`Marker ${checkpoint} found`);
+                        activateCheckpoint(checkpoint);
+                    });
+                    
+                    this.el.addEventListener('markerLost', () => {
+                        console.log('Marker lost');
+                        deactivateCheckpoint();
+                    });
+                }
+            });
+        }
+        
+        function activateCheckpoint(checkpointNumber) {
+            const state = GameState.getState();
+            
+            // Check if checkpoint is unlocked
+            if (checkpointNumber > 1 && !state.checkpoints.includes(checkpointNumber - 1)) {
+                showMessage(`Checkpoint ${checkpointNumber} is locked! Complete previous checkpoints first.`);
+                return;
+            }
+            
+            // Check if already completed
+            if (state.checkpoints.includes(checkpointNumber)) {
+                showMessage(`Checkpoint ${checkpointNumber} already completed!`);
+                return;
+            }
+            
+            currentCheckpoint = checkpointNumber;
+            
+            // Show checkpoint content
+            const content = document.querySelector(`#checkpoint-${checkpointNumber}-content`);
+            if (content) {
+                content.setAttribute('visible', 'true');
+            }
+            
+            // Update UI
+            document.getElementById('ar-title').textContent = getCheckpointName(checkpointNumber);
+            document.getElementById('current-checkpoint').textContent = `Checkpoint: ${checkpointNumber}`;
+            
+            // Initialize minigame
+            initializeMinigame(checkpointNumber);
+        }
+        
+        function deactivateCheckpoint() {
+            if (currentCheckpoint) {
+                // Hide checkpoint content
+                const content = document.querySelector(`#checkpoint-${currentCheckpoint}-content`);
+                if (content) {
+                    content.setAttribute('visible', 'false');
+                }
+                
+                // Reset UI
+                document.getElementById('ar-title').textContent = 'Scan a Marker';
+                document.getElementById('current-checkpoint').textContent = 'Checkpoint: None';
+                document.getElementById('minigame-ui').style.display = 'none';
+                
+                // Cleanup minigame
+                if (currentMinigame) {
+                    currentMinigame.cleanup();
+                    currentMinigame = null;
+                }
+                
+                currentCheckpoint = null;
+            }
+        }
+        
+        function initializeMinigame(checkpointNumber) {
+            const minigames = {
+                1: () => new CaptainCompassGame(),
+                2: () => new KrakenQuizGame(),
+                3: () => new CannonballAccuracyGame(),
+                4: () => new TreasureChestLockGame(),
+                5: () => new PirateBalanceGame(),
+                6: () => new SkeletonDuelGame(),
+                7: () => new MapAssemblyGame(),
+                8: () => new LostLootGame()
+            };
+            
+            if (minigames[checkpointNumber]) {
+                currentMinigame = minigames[checkpointNumber]();
+                currentMinigame.initialize();
+                
+                // Show minigame UI
+                document.getElementById('minigame-ui').style.display = 'block';
+                updateMinigameUI();
+            }
+        }
+        
+        function handleMinigameAction() {
+            if (currentMinigame && currentMinigame.handleAction) {
+                currentMinigame.handleAction();
+                updateMinigameUI();
+            }
+        }
+        
+        function resetCurrentMinigame() {
+            if (currentMinigame && currentMinigame.reset) {
+                currentMinigame.reset();
+                updateMinigameUI();
+            }
+        }
+        
+        function updateMinigameUI() {
+            if (currentMinigame) {
+                const content = document.getElementById('minigame-content');
+                content.innerHTML = currentMinigame.getUIContent();
+                
+                // Update progress bar
+                const progressFill = document.getElementById('progress-fill');
+                progressFill.style.width = `${currentMinigame.getProgress()}%`;
+            }
+        }
+        
+        async function completeCheckpoint(checkpointNumber, earnedKey = false) {
+            try {
+                await GameState.completeCheckpoint(checkpointNumber, earnedKey);
+                
+                showMessage(`Checkpoint ${checkpointNumber} completed!${earnedKey ? ' Golden key earned!' : ''}`);
+                
+                // Hide minigame UI
+                setTimeout(() => {
+                    document.getElementById('minigame-ui').style.display = 'none';
+                }, 2000);
+                
+            } catch (error) {
+                console.error('Error completing checkpoint:', error);
+                showMessage('Error saving progress. Please try again.');
+            }
+        }
+        
+        function getCheckpointName(number) {
+            const names = {
+                1: "Captain's Compass",
+                2: "Kraken's Quiz", 
+                3: "Cannonball Accuracy",
+                4: "Treasure Chest Lock",
+                5: "Pirate's Balance",
+                6: "Skeleton Duel",
+                7: "Map Assembly",
+                8: "The Lost Loot"
+            };
+            return names[number] || `Checkpoint ${number}`;
+        }
+        
+        function showMessage(message) {
+            const instructions = document.getElementById('ar-instructions');
+            instructions.innerHTML = `<p>${message}</p>`;
+            
+            setTimeout(() => {
+                instructions.innerHTML = '<p>Point your camera at an AR marker to begin the minigame</p>';
+            }, 3000);
+        }
+        
+        function requestDeviceOrientation() {
+            if (typeof DeviceOrientationEvent !== 'undefined' && typeof DeviceOrientationEvent.requestPermission === 'function') {
+                DeviceOrientationEvent.requestPermission()
+                    .then(response => {
+                        if (response === 'granted') {
+                            console.log('Device orientation permission granted');
+                        }
+                    })
+                    .catch(console.error);
+            }
+        }
+        
+        // Export functions for minigames to use
+        window.ARView = {
+            completeCheckpoint,
+            showMessage,
+            updateMinigameUI,
+            getCurrentCheckpoint: () => currentCheckpoint
+        };
+    </script>
+</body>
+</html>
