@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lost Loot - Pirate AR Treasure Hunt</title>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body class="login-page">
+    <div class="container">
+        <header class="game-header">
+            <h1 class="game-title">⚓ Lost Loot ⚓</h1>
+            <p class="game-subtitle">Pirate AR Treasure Hunt</p>
+        </header>
+        
+        <main class="login-content">
+            <div class="login-form">
+                <h2>Assemble Your Crew</h2>
+                <p>Enter your team ID to begin the treasure hunt</p>
+                
+                <form id="team-login-form">
+                    <div class="input-group">
+                        <label for="team-id">Team ID:</label>
+                        <input 
+                            type="text" 
+                            id="team-id" 
+                            name="teamId" 
+                            placeholder="Enter team ID" 
+                            required
+                            autocomplete="off"
+                        >
+                    </div>
+                    
+                    <button type="submit" class="start-hunt-btn">
+                        🏴‍☠️ Start Hunt
+                    </button>
+                </form>
+                
+                <div id="error-message" class="error-message" style="display: none;"></div>
+                <div id="loading" class="loading" style="display: none;">
+                    Initializing treasure hunt...
+                </div>
+            </div>
+        </main>
+        
+        <footer class="game-footer">
+            <p>Teams of 3 pirates • 8 checkpoints • Find the lost treasure!</p>
+        </footer>
+    </div>
+    
+    <script src="js/utils.js"></script>
+    <script src="js/api-client.js"></script>
+    <script src="js/game-state.js"></script>
+    <script>
+        // Team login handling
+        document.getElementById('team-login-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const teamId = document.getElementById('team-id').value.trim();
+            const errorDiv = document.getElementById('error-message');
+            const loadingDiv = document.getElementById('loading');
+            
+            if (!teamId) {
+                showError('Please enter a team ID');
+                return;
+            }
+            
+            // Show loading state
+            loadingDiv.style.display = 'block';
+            errorDiv.style.display = 'none';
+            
+            try {
+                // Initialize game state
+                await GameState.initializeTeam(teamId);
+                
+                // Redirect to HUD
+                window.location.href = 'hud.html';
+            } catch (error) {
+                console.error('Login error:', error);
+                showError('Failed to start game. Please try again.');
+            } finally {
+                loadingDiv.style.display = 'none';
+            }
+        });
+        
+        function showError(message) {
+            const errorDiv = document.getElementById('error-message');
+            errorDiv.textContent = message;
+            errorDiv.style.display = 'block';
+        }
+        
+        // Check if team is already logged in
+        document.addEventListener('DOMContentLoaded', () => {
+            if (typeof GameState !== 'undefined' && GameState.isInitialized()) {
+                window.location.href = 'hud.html';
+            }
+        });
+    </script>
+</body>
+</html>

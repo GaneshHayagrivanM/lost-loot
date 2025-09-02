@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lost Loot - Game HUD</title>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body class="hud-page">
+    <div class="hud-container">
+        <!-- Header with timer and team info -->
+        <header class="hud-header">
+            <div class="team-info">
+                <h1>⚓ <span id="team-name">Team</span></h1>
+            </div>
+            <div class="timer-display">
+                <span class="timer-label">Hunt Timer:</span>
+                <span id="hunt-timer" class="timer">00:00:00</span>
+            </div>
+        </header>
+        
+        <!-- Main HUD content -->
+        <main class="hud-main">
+            <!-- Clue Board -->
+            <section class="clue-board">
+                <h2>🗺️ Current Clue</h2>
+                <div id="current-clue" class="clue-text">
+                    Welcome, brave pirates! Scan the first marker to begin your treasure hunt...
+                </div>
+            </section>
+            
+            <!-- Key Inventory -->
+            <section class="key-inventory">
+                <h3>🗝️ Golden Keys</h3>
+                <div class="keys-display">
+                    <div id="key-1" class="key-slot empty">🔑</div>
+                    <div id="key-2" class="key-slot empty">🔑</div>
+                    <div id="key-3" class="key-slot empty">🔑</div>
+                </div>
+                <p class="keys-info"><span id="keys-count">0</span>/3 keys collected</p>
+            </section>
+            
+            <!-- Checkpoint Progress -->
+            <section class="checkpoint-progress">
+                <h3>🏴‍☠️ Checkpoint Progress</h3>
+                <div class="checkpoints-grid">
+                    <div id="checkpoint-1" class="checkpoint locked" data-checkpoint="1">
+                        <span class="checkpoint-number">1</span>
+                        <span class="checkpoint-name">Captain's Compass</span>
+                        <span class="checkpoint-status">🔒</span>
+                    </div>
+                    <div id="checkpoint-2" class="checkpoint locked" data-checkpoint="2">
+                        <span class="checkpoint-number">2</span>
+                        <span class="checkpoint-name">Kraken's Quiz</span>
+                        <span class="checkpoint-status">🔒</span>
+                    </div>
+                    <div id="checkpoint-3" class="checkpoint locked" data-checkpoint="3">
+                        <span class="checkpoint-number">3</span>
+                        <span class="checkpoint-name">Cannonball Accuracy</span>
+                        <span class="checkpoint-status">🔒</span>
+                    </div>
+                    <div id="checkpoint-4" class="checkpoint locked" data-checkpoint="4">
+                        <span class="checkpoint-number">4</span>
+                        <span class="checkpoint-name">Treasure Chest Lock</span>
+                        <span class="checkpoint-status">🔒</span>
+                    </div>
+                    <div id="checkpoint-5" class="checkpoint locked" data-checkpoint="5">
+                        <span class="checkpoint-number">5</span>
+                        <span class="checkpoint-name">Pirate's Balance</span>
+                        <span class="checkpoint-status">🔒</span>
+                    </div>
+                    <div id="checkpoint-6" class="checkpoint locked" data-checkpoint="6">
+                        <span class="checkpoint-number">6</span>
+                        <span class="checkpoint-name">Skeleton Duel</span>
+                        <span class="checkpoint-status">🔒</span>
+                    </div>
+                    <div id="checkpoint-7" class="checkpoint locked" data-checkpoint="7">
+                        <span class="checkpoint-number">7</span>
+                        <span class="checkpoint-name">Map Assembly</span>
+                        <span class="checkpoint-status">🔒</span>
+                    </div>
+                    <div id="checkpoint-8" class="checkpoint locked" data-checkpoint="8">
+                        <span class="checkpoint-number">8</span>
+                        <span class="checkpoint-name">The Lost Loot</span>
+                        <span class="checkpoint-status">🔒</span>
+                    </div>
+                </div>
+            </section>
+        </main>
+        
+        <!-- Action buttons -->
+        <footer class="hud-footer">
+            <button id="scan-marker-btn" class="scan-btn">
+                📱 Scan Marker
+            </button>
+            <button id="team-status-btn" class="status-btn">
+                👥 Team Status
+            </button>
+        </footer>
+        
+        <!-- Status overlay -->
+        <div id="status-overlay" class="status-overlay" style="display: none;">
+            <div class="status-content">
+                <h3>Team Status</h3>
+                <div id="status-info"></div>
+                <button onclick="hideStatusOverlay()">Close</button>
+            </div>
+        </div>
+        
+        <!-- Sync indicator -->
+        <div id="sync-indicator" class="sync-indicator">
+            <span class="sync-dot"></span>
+            <span>Syncing...</span>
+        </div>
+    </div>
+    
+    <script src="js/utils.js"></script>
+    <script src="js/api-client.js"></script>
+    <script src="js/game-state.js"></script>
+    <script>
+        let timerInterval;
+        let syncInterval;
+        
+        // Initialize HUD
+        document.addEventListener('DOMContentLoaded', async () => {
+            // Check if team is logged in
+            if (!GameState.isInitialized()) {
+                window.location.href = 'index.html';
+                return;
+            }
+            
+            // Initialize UI
+            updateTeamInfo();
+            updateCheckpointProgress();
+            updateKeyInventory();
+            updateClue();
+            
+            // Start timer
+            startHuntTimer();
+            
+            // Start real-time sync
+            startSync();
+            
+            // Setup event listeners
+            setupEventListeners();
+        });
+        
+        function setupEventListeners() {
+            document.getElementById('scan-marker-btn').addEventListener('click', () => {
+                window.location.href = 'ar.html';
+            });
+            
+            document.getElementById('team-status-btn').addEventListener('click', showTeamStatus);
+        }
+        
+        function updateTeamInfo() {
+            const state = GameState.getState();
+            document.getElementById('team-name').textContent = state.teamId || 'Unknown';
+        }
+        
+        function updateCheckpointProgress() {
+            const state = GameState.getState();
+            
+            // Update checkpoint status based on game state
+            for (let i = 1; i <= 8; i++) {
+                const checkpoint = document.getElementById(`checkpoint-${i}`);
+                const isCompleted = state.checkpoints.includes(i);
+                const isUnlocked = i === 1 || state.checkpoints.includes(i - 1);
+                
+                checkpoint.className = 'checkpoint';
+                if (isCompleted) {
+                    checkpoint.classList.add('completed');
+                    checkpoint.querySelector('.checkpoint-status').textContent = '✅';
+                } else if (isUnlocked) {
+                    checkpoint.classList.add('unlocked');
+                    checkpoint.querySelector('.checkpoint-status').textContent = '🔓';
+                } else {
+                    checkpoint.classList.add('locked');
+                    checkpoint.querySelector('.checkpoint-status').textContent = '🔒';
+                }
+            }
+        }
+        
+        function updateKeyInventory() {
+            const state = GameState.getState();
+            const keyCount = state.keys.length;
+            
+            // Update key slots
+            for (let i = 1; i <= 3; i++) {
+                const keySlot = document.getElementById(`key-${i}`);
+                if (state.keys.includes(i)) {
+                    keySlot.classList.remove('empty');
+                    keySlot.classList.add('collected');
+                } else {
+                    keySlot.classList.remove('collected');
+                    keySlot.classList.add('empty');
+                }
+            }
+            
+            document.getElementById('keys-count').textContent = keyCount;
+        }
+        
+        function updateClue() {
+            const state = GameState.getState();
+            const clues = {
+                1: "Seek ye the Captain's Compass to find your bearing! Navigate by the stars to claim your first golden key.",
+                2: "The Kraken challenges your knowledge of the seven seas! Answer wisely, brave pirate.",
+                3: "Man the cannons! Your accuracy determines your fate in this naval battle.",
+                4: "A treasure chest awaits, but first solve the lock's secret sequence to claim the second golden key.",
+                5: "Balance the pirate's fortune! Keep the coins steady as the ship rocks beneath your feet.",
+                6: "Face the skeleton crew in a duel of reflexes! Quick hands win the day.",
+                7: "Assemble the ancient map to reveal the treasure's location and claim the final golden key!",
+                8: "The Lost Loot awaits! Use your three golden keys to unlock the greatest treasure of all!"
+            };
+            
+            const nextCheckpoint = state.checkpoints.length + 1;
+            const clueText = clues[nextCheckpoint] || "Congratulations! You've completed all checkpoints!";
+            
+            document.getElementById('current-clue').textContent = clueText;
+        }
+        
+        function startHuntTimer() {
+            const state = GameState.getState();
+            const startTime = state.startTime || Date.now();
+            
+            timerInterval = setInterval(() => {
+                const elapsed = Date.now() - startTime;
+                const hours = Math.floor(elapsed / 3600000);
+                const minutes = Math.floor((elapsed % 3600000) / 60000);
+                const seconds = Math.floor((elapsed % 60000) / 1000);
+                
+                const timeString = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+                document.getElementById('hunt-timer').textContent = timeString;
+            }, 1000);
+        }
+        
+        function startSync() {
+            // Real-time synchronization every 5 seconds
+            syncInterval = setInterval(async () => {
+                try {
+                    const syncIndicator = document.getElementById('sync-indicator');
+                    syncIndicator.style.display = 'flex';
+                    
+                    await GameState.syncWithServer();
+                    
+                    // Update UI after sync
+                    updateCheckpointProgress();
+                    updateKeyInventory();
+                    updateClue();
+                    
+                    setTimeout(() => {
+                        syncIndicator.style.display = 'none';
+                    }, 1000);
+                } catch (error) {
+                    console.error('Sync error:', error);
+                }
+            }, 5000);
+        }
+        
+        function showTeamStatus() {
+            const state = GameState.getState();
+            const overlay = document.getElementById('status-overlay');
+            const statusInfo = document.getElementById('status-info');
+            
+            statusInfo.innerHTML = `
+                <p><strong>Team ID:</strong> ${state.teamId}</p>
+                <p><strong>Checkpoints Completed:</strong> ${state.checkpoints.length}/8</p>
+                <p><strong>Golden Keys:</strong> ${state.keys.length}/3</p>
+                <p><strong>Hunt Started:</strong> ${new Date(state.startTime).toLocaleTimeString()}</p>
+                <p><strong>Last Sync:</strong> ${new Date().toLocaleTimeString()}</p>
+            `;
+            
+            overlay.style.display = 'flex';
+        }
+        
+        function hideStatusOverlay() {
+            document.getElementById('status-overlay').style.display = 'none';
+        }
+        
+        // Cleanup on page unload
+        window.addEventListener('beforeunload', () => {
+            if (timerInterval) clearInterval(timerInterval);
+            if (syncInterval) clearInterval(syncInterval);
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,1004 @@
+/* Lost Loot - Pirate AR Treasure Hunt Game Styles */
+
+/* CSS Reset and Base Styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Arial', sans-serif;
+    background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+    color: #ffffff;
+    min-height: 100vh;
+    overflow-x: hidden;
+}
+
+/* Common Components */
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Buttons */
+.btn {
+    padding: 12px 24px;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-decoration: none;
+    display: inline-block;
+    text-align: center;
+}
+
+.btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+.btn:active {
+    transform: translateY(0);
+}
+
+/* === LOGIN PAGE STYLES === */
+.login-page {
+    background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+    position: relative;
+    overflow: hidden;
+}
+
+.login-page::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image: 
+        radial-gradient(circle at 25% 25%, rgba(255, 215, 0, 0.1) 0%, transparent 50%),
+        radial-gradient(circle at 75% 75%, rgba(139, 69, 19, 0.1) 0%, transparent 50%);
+    pointer-events: none;
+}
+
+.game-header {
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+.game-title {
+    font-size: 3.5rem;
+    color: #FFD700;
+    text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.5);
+    margin-bottom: 10px;
+    font-weight: bold;
+}
+
+.game-subtitle {
+    font-size: 1.2rem;
+    color: #E6E6FA;
+    margin-bottom: 0;
+}
+
+.login-content {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex: 1;
+}
+
+.login-form {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    border-radius: 16px;
+    padding: 40px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    max-width: 400px;
+    width: 100%;
+    text-align: center;
+}
+
+.login-form h2 {
+    color: #FFD700;
+    margin-bottom: 10px;
+    font-size: 1.8rem;
+}
+
+.login-form p {
+    margin-bottom: 30px;
+    color: #E6E6FA;
+}
+
+.input-group {
+    margin-bottom: 24px;
+    text-align: left;
+}
+
+.input-group label {
+    display: block;
+    margin-bottom: 8px;
+    color: #FFD700;
+    font-weight: bold;
+}
+
+.input-group input {
+    width: 100%;
+    padding: 12px 16px;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.1);
+    color: #ffffff;
+    font-size: 16px;
+    transition: border-color 0.3s ease;
+}
+
+.input-group input:focus {
+    outline: none;
+    border-color: #FFD700;
+    box-shadow: 0 0 0 3px rgba(255, 215, 0, 0.3);
+}
+
+.input-group input::placeholder {
+    color: rgba(255, 255, 255, 0.6);
+}
+
+.start-hunt-btn {
+    background: linear-gradient(45deg, #FFD700, #FFA500);
+    color: #8B4513;
+    font-size: 18px;
+    padding: 16px 32px;
+    border-radius: 12px;
+    border: none;
+    cursor: pointer;
+    font-weight: bold;
+    width: 100%;
+    transition: all 0.3s ease;
+}
+
+.start-hunt-btn:hover {
+    background: linear-gradient(45deg, #FFA500, #FFD700);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(255, 215, 0, 0.4);
+}
+
+.error-message {
+    background: rgba(244, 67, 54, 0.9);
+    color: white;
+    padding: 12px;
+    border-radius: 8px;
+    margin-top: 16px;
+    text-align: center;
+}
+
+.loading {
+    background: rgba(33, 150, 243, 0.9);
+    color: white;
+    padding: 12px;
+    border-radius: 8px;
+    margin-top: 16px;
+    text-align: center;
+}
+
+.game-footer {
+    text-align: center;
+    color: #E6E6FA;
+    font-size: 0.9rem;
+    margin-top: 40px;
+}
+
+/* === HUD PAGE STYLES === */
+.hud-page {
+    background: linear-gradient(135deg, #0f1419 0%, #1e3c72 100%);
+}
+
+.hud-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+    min-height: 100vh;
+    display: grid;
+    grid-template-rows: auto 1fr auto;
+    gap: 20px;
+}
+
+.hud-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: rgba(0, 0, 0, 0.3);
+    padding: 20px;
+    border-radius: 12px;
+    backdrop-filter: blur(10px);
+}
+
+.team-info h1 {
+    color: #FFD700;
+    font-size: 1.8rem;
+}
+
+.timer-display {
+    text-align: right;
+}
+
+.timer-label {
+    color: #E6E6FA;
+    font-size: 0.9rem;
+    display: block;
+}
+
+.timer {
+    color: #FFD700;
+    font-size: 2rem;
+    font-weight: bold;
+    font-family: 'Courier New', monospace;
+}
+
+.hud-main {
+    display: grid;
+    grid-template-columns: 1fr 300px;
+    gap: 20px;
+}
+
+.clue-board {
+    background: rgba(139, 69, 19, 0.2);
+    border: 2px solid #8B4513;
+    border-radius: 12px;
+    padding: 20px;
+    backdrop-filter: blur(5px);
+}
+
+.clue-board h2 {
+    color: #FFD700;
+    margin-bottom: 15px;
+    font-size: 1.5rem;
+}
+
+.clue-text {
+    color: #E6E6FA;
+    font-size: 1.1rem;
+    line-height: 1.6;
+    font-style: italic;
+}
+
+.key-inventory {
+    background: rgba(255, 215, 0, 0.1);
+    border: 2px solid #FFD700;
+    border-radius: 12px;
+    padding: 20px;
+    margin-bottom: 20px;
+}
+
+.key-inventory h3 {
+    color: #FFD700;
+    margin-bottom: 15px;
+}
+
+.keys-display {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 10px;
+}
+
+.key-slot {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    border: 2px solid;
+    transition: all 0.3s ease;
+}
+
+.key-slot.empty {
+    border-color: #666;
+    background: rgba(102, 102, 102, 0.2);
+    opacity: 0.5;
+}
+
+.key-slot.collected {
+    border-color: #FFD700;
+    background: linear-gradient(45deg, #FFD700, #FFA500);
+    box-shadow: 0 0 15px rgba(255, 215, 0, 0.5);
+    animation: keyGlow 2s ease-in-out infinite alternate;
+}
+
+@keyframes keyGlow {
+    from { box-shadow: 0 0 15px rgba(255, 215, 0, 0.5); }
+    to { box-shadow: 0 0 25px rgba(255, 215, 0, 0.8); }
+}
+
+.keys-info {
+    color: #E6E6FA;
+    font-size: 0.9rem;
+}
+
+.checkpoint-progress {
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 12px;
+    padding: 20px;
+}
+
+.checkpoint-progress h3 {
+    color: #FFD700;
+    margin-bottom: 15px;
+}
+
+.checkpoints-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+}
+
+.checkpoint {
+    display: flex;
+    align-items: center;
+    padding: 12px;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+    border: 2px solid;
+}
+
+.checkpoint.locked {
+    border-color: #666;
+    background: rgba(102, 102, 102, 0.2);
+    opacity: 0.6;
+}
+
+.checkpoint.unlocked {
+    border-color: #2196F3;
+    background: rgba(33, 150, 243, 0.2);
+    cursor: pointer;
+}
+
+.checkpoint.unlocked:hover {
+    background: rgba(33, 150, 243, 0.3);
+}
+
+.checkpoint.completed {
+    border-color: #4CAF50;
+    background: rgba(76, 175, 80, 0.2);
+}
+
+.checkpoint-number {
+    font-weight: bold;
+    font-size: 1.2rem;
+    margin-right: 8px;
+    min-width: 20px;
+}
+
+.checkpoint-name {
+    flex: 1;
+    font-size: 0.9rem;
+}
+
+.checkpoint-status {
+    font-size: 1.2rem;
+}
+
+.hud-footer {
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+}
+
+.scan-btn {
+    background: linear-gradient(45deg, #4CAF50, #45a049);
+    color: white;
+    font-size: 18px;
+    padding: 16px 32px;
+    border-radius: 12px;
+}
+
+.status-btn {
+    background: linear-gradient(45deg, #2196F3, #1976D2);
+    color: white;
+    font-size: 16px;
+    padding: 16px 24px;
+    border-radius: 12px;
+}
+
+.status-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.8);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+}
+
+.status-content {
+    background: linear-gradient(135deg, #1e3c72, #2a5298);
+    padding: 30px;
+    border-radius: 16px;
+    max-width: 400px;
+    width: 90%;
+    border: 2px solid #FFD700;
+}
+
+.status-content h3 {
+    color: #FFD700;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.status-content p {
+    margin-bottom: 10px;
+    color: #E6E6FA;
+}
+
+.status-content button {
+    background: #FFD700;
+    color: #8B4513;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: bold;
+    width: 100%;
+    margin-top: 20px;
+}
+
+.sync-indicator {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    background: rgba(33, 150, 243, 0.9);
+    color: white;
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    display: none;
+    align-items: center;
+    gap: 8px;
+    z-index: 1000;
+}
+
+.sync-dot {
+    width: 8px;
+    height: 8px;
+    background: #FFD700;
+    border-radius: 50%;
+    animation: pulse 1s ease-in-out infinite;
+}
+
+@keyframes pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.5; transform: scale(1.2); }
+}
+
+/* === AR PAGE STYLES === */
+.ar-page {
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background: #000;
+}
+
+a-scene {
+    height: 100vh;
+    width: 100vw;
+}
+
+.ar-ui-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    pointer-events: none;
+    z-index: 1000;
+    display: flex;
+    flex-direction: column;
+}
+
+.ar-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px;
+    background: linear-gradient(to bottom, rgba(0, 0, 0, 0.8), transparent);
+    pointer-events: auto;
+}
+
+.back-btn {
+    background: rgba(255, 215, 0, 0.9);
+    color: #8B4513;
+    padding: 10px 16px;
+    border: none;
+    border-radius: 8px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.ar-header h2 {
+    color: #FFD700;
+    margin: 0;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+}
+
+.ar-instructions {
+    background: rgba(0, 0, 0, 0.7);
+    color: white;
+    padding: 16px;
+    margin: 20px;
+    border-radius: 12px;
+    text-align: center;
+    pointer-events: auto;
+    backdrop-filter: blur(5px);
+}
+
+.minigame-ui {
+    background: rgba(0, 0, 0, 0.8);
+    color: white;
+    margin: 20px;
+    border-radius: 12px;
+    padding: 20px;
+    pointer-events: auto;
+    backdrop-filter: blur(10px);
+    border: 2px solid #FFD700;
+}
+
+.minigame-controls {
+    display: flex;
+    gap: 12px;
+    margin-top: 16px;
+}
+
+.action-btn {
+    background: linear-gradient(45deg, #4CAF50, #45a049);
+    color: white;
+    flex: 1;
+    padding: 12px;
+    border: none;
+    border-radius: 8px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.reset-btn {
+    background: linear-gradient(45deg, #FF9800, #F57C00);
+    color: white;
+    flex: 1;
+    padding: 12px;
+    border: none;
+    border-radius: 8px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.checkpoint-indicator {
+    margin-top: auto;
+    background: rgba(0, 0, 0, 0.8);
+    padding: 16px;
+    pointer-events: auto;
+}
+
+.checkpoint-indicator span {
+    color: #FFD700;
+    font-weight: bold;
+    display: block;
+    margin-bottom: 8px;
+}
+
+.progress-bar {
+    width: 100%;
+    height: 8px;
+    background: rgba(255, 255, 255, 0.3);
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.progress-fill {
+    height: 100%;
+    background: linear-gradient(45deg, #4CAF50, #8BC34A);
+    width: 0%;
+    transition: width 0.3s ease;
+    border-radius: 4px;
+}
+
+/* === MINIGAME SPECIFIC STYLES === */
+
+/* Compass Game */
+.compass-game {
+    text-align: center;
+}
+
+.compass-display {
+    background: rgba(139, 69, 19, 0.3);
+    border-radius: 8px;
+    padding: 16px;
+    margin: 16px 0;
+}
+
+.current-heading, .target-heading {
+    font-size: 1.2rem;
+    margin-bottom: 8px;
+}
+
+.alignment-indicator {
+    font-size: 1.1rem;
+    font-weight: bold;
+    padding: 8px;
+    border-radius: 4px;
+    background: rgba(244, 67, 54, 0.3);
+    transition: background 0.3s ease;
+}
+
+.alignment-indicator.aligned {
+    background: rgba(76, 175, 80, 0.3);
+    animation: alignmentPulse 1s ease-in-out infinite;
+}
+
+@keyframes alignmentPulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.7; }
+}
+
+/* Quiz Game */
+.quiz-game {
+    text-align: center;
+}
+
+.question-counter {
+    background: rgba(33, 150, 243, 0.3);
+    padding: 8px;
+    border-radius: 4px;
+    margin-bottom: 16px;
+    font-weight: bold;
+}
+
+.question {
+    font-size: 1.1rem;
+    margin-bottom: 20px;
+    color: #FFD700;
+}
+
+.options {
+    display: grid;
+    gap: 8px;
+    margin-bottom: 16px;
+}
+
+.quiz-option {
+    background: rgba(255, 255, 255, 0.1);
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    color: white;
+    padding: 12px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-align: left;
+}
+
+.quiz-option:hover {
+    background: rgba(255, 255, 255, 0.2);
+    border-color: #FFD700;
+}
+
+.quiz-option.selected {
+    background: rgba(255, 215, 0, 0.3);
+    border-color: #FFD700;
+    color: #FFD700;
+}
+
+.score {
+    font-weight: bold;
+    color: #4CAF50;
+}
+
+/* Cannon Game */
+.cannon-game {
+    text-align: center;
+}
+
+.game-stats {
+    display: flex;
+    justify-content: space-around;
+    background: rgba(139, 69, 19, 0.3);
+    padding: 12px;
+    border-radius: 8px;
+    margin-bottom: 16px;
+}
+
+.targets {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    margin: 16px 0;
+}
+
+.target {
+    font-size: 1.5rem;
+    padding: 8px;
+    border-radius: 50%;
+    border: 2px solid;
+    min-width: 40px;
+    min-height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.target.active {
+    border-color: #F44336;
+    background: rgba(244, 67, 54, 0.2);
+}
+
+.target.hit {
+    border-color: #4CAF50;
+    background: rgba(76, 175, 80, 0.2);
+    animation: hitEffect 0.5s ease-in-out;
+}
+
+@keyframes hitEffect {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.2); }
+    100% { transform: scale(1); }
+}
+
+/* Chest Game */
+.chest-game {
+    text-align: center;
+}
+
+.sequence-display, .input-sequence {
+    background: rgba(139, 69, 19, 0.3);
+    padding: 12px;
+    border-radius: 8px;
+    margin-bottom: 16px;
+}
+
+.sequence, .player-sequence {
+    font-size: 1.5rem;
+    font-family: monospace;
+    margin-top: 8px;
+}
+
+.symbol-buttons {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+    margin-top: 16px;
+}
+
+.symbol-btn {
+    background: rgba(255, 215, 0, 0.2);
+    border: 2px solid #FFD700;
+    color: #FFD700;
+    padding: 12px;
+    border-radius: 8px;
+    font-size: 1.2rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.symbol-btn:hover:not(:disabled) {
+    background: rgba(255, 215, 0, 0.4);
+}
+
+.symbol-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+/* Balance Game */
+.balance-game {
+    text-align: center;
+}
+
+.balance-table {
+    background: rgba(139, 69, 19, 0.3);
+    padding: 20px;
+    border-radius: 8px;
+    margin: 16px 0;
+    font-size: 1.5rem;
+}
+
+.tilt-indicator {
+    background: rgba(33, 150, 243, 0.3);
+    padding: 8px;
+    border-radius: 4px;
+    margin-top: 16px;
+    font-family: monospace;
+    font-size: 0.9rem;
+}
+
+/* Duel Game */
+.duel-game {
+    text-align: center;
+}
+
+.duel-area {
+    background: rgba(139, 69, 19, 0.3);
+    padding: 40px;
+    border-radius: 8px;
+    margin: 16px 0;
+    font-size: 1.5rem;
+    border: 3px solid transparent;
+    transition: all 0.3s ease;
+}
+
+.duel-area.attack-mode {
+    background: rgba(244, 67, 54, 0.5);
+    border-color: #F44336;
+    animation: attackAlert 0.5s ease-in-out infinite;
+}
+
+@keyframes attackAlert {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+}
+
+.reaction-time {
+    background: rgba(76, 175, 80, 0.3);
+    padding: 8px;
+    border-radius: 4px;
+    margin-top: 8px;
+    font-weight: bold;
+}
+
+/* Map Game */
+.map-game {
+    text-align: center;
+}
+
+.map-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    margin: 16px 0;
+}
+
+.map-piece {
+    background: rgba(139, 69, 19, 0.3);
+    border: 2px solid #8B4513;
+    padding: 16px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-align: center;
+}
+
+.map-piece:hover {
+    background: rgba(139, 69, 19, 0.5);
+}
+
+.map-piece.placed {
+    background: rgba(76, 175, 80, 0.3);
+    border-color: #4CAF50;
+    cursor: default;
+}
+
+.map-piece.empty {
+    opacity: 0.7;
+}
+
+/* Treasure Game */
+.treasure-game {
+    text-align: center;
+}
+
+.treasure-status {
+    background: rgba(255, 215, 0, 0.2);
+    padding: 16px;
+    border-radius: 8px;
+    margin-bottom: 16px;
+}
+
+.key-slots {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    margin-top: 8px;
+}
+
+.key-slot {
+    font-size: 1.5rem;
+    padding: 8px;
+    border-radius: 50%;
+    border: 2px solid;
+    min-width: 40px;
+    min-height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.key-slot.ready {
+    border-color: #FFD700;
+    background: rgba(255, 215, 0, 0.2);
+}
+
+.key-slot.used {
+    border-color: #4CAF50;
+    background: rgba(76, 175, 80, 0.2);
+}
+
+.treasure-chest {
+    font-size: 3rem;
+    margin: 20px 0;
+    padding: 20px;
+    border-radius: 12px;
+    transition: all 0.5s ease;
+}
+
+.treasure-chest.closed {
+    background: rgba(139, 69, 19, 0.3);
+}
+
+.treasure-chest.opened {
+    background: linear-gradient(45deg, rgba(255, 215, 0, 0.3), rgba(255, 165, 0, 0.3));
+    animation: treasureGlow 2s ease-in-out infinite alternate;
+}
+
+@keyframes treasureGlow {
+    from { box-shadow: 0 0 20px rgba(255, 215, 0, 0.5); }
+    to { box-shadow: 0 0 40px rgba(255, 215, 0, 0.8); }
+}
+
+/* === RESPONSIVE DESIGN === */
+@media (max-width: 768px) {
+    .game-title {
+        font-size: 2.5rem;
+    }
+    
+    .hud-main {
+        grid-template-columns: 1fr;
+        gap: 16px;
+    }
+    
+    .hud-header {
+        flex-direction: column;
+        gap: 16px;
+        text-align: center;
+    }
+    
+    .timer {
+        font-size: 1.5rem;
+    }
+    
+    .checkpoints-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .hud-footer {
+        flex-direction: column;
+        gap: 12px;
+    }
+    
+    .login-form {
+        margin: 0 20px;
+        padding: 30px 20px;
+    }
+    
+    .ar-header {
+        padding: 16px;
+    }
+    
+    .minigame-ui {
+        margin: 16px;
+        padding: 16px;
+    }
+    
+    .symbol-buttons {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    .map-grid {
+        grid-template-columns: 1fr;
+    }
+}
