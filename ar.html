@@ -13,7 +13,7 @@
     <!-- AR Scene -->
     <a-scene
         embedded
-        arjs="sourceType: webcam; debugUIEnabled: false; detectionMode: mono_and_matrix; matrixCodeType: 3x3; cameraParametersUrl: data/camera_para.dat;"
+        arjs="sourceType: webcam; debugUIEnabled: false; detectionMode: mono_and_matrix; matrixCodeType: 3x3;"
         renderer="logarithmicDepthBuffer: true;"
         vr-mode-ui="enabled: false"
         gesture-detector
@@ -611,17 +611,22 @@
         }
         
         function requestDeviceOrientation() {
+            console.log('Checking device orientation permissions...');
+            
             if (typeof DeviceOrientationEvent !== 'undefined' && typeof DeviceOrientationEvent.requestPermission === 'function') {
+                console.log('Device orientation permission required (iOS)');
                 DeviceOrientationEvent.requestPermission()
                     .then(response => {
                         if (response === 'granted') {
-                            console.log('Device orientation permission granted');
+                            console.log('✅ Device orientation permission granted');
                         } else {
-                            console.warn('Device orientation permission denied');
+                            console.warn('❌ Device orientation permission denied');
+                            showMessage('Device orientation permission denied. Some features may not work properly.');
                         }
                     })
                     .catch(error => {
                         console.error('Device orientation permission error:', error);
+                        showMessage('Device orientation setup failed. Please check browser permissions.');
                     });
             } else {
                 console.log('Device orientation permission not required');
