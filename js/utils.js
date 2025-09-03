@@ -354,7 +354,21 @@ const ARUtils = {
         try {
             // Check if A-Frame is loaded and has required version
             if (typeof AFRAME === 'undefined') {
-                return { compatible: false, reason: 'A-Frame not loaded' };
+                // Check if script tags are present but failed to load
+                const aframeScript = document.querySelector('script[src*="aframe"]');
+                const arjsScript = document.querySelector('script[src*="AR.js"]');
+                
+                if (aframeScript && arjsScript) {
+                    return Promise.resolve({ 
+                        compatible: false, 
+                        reason: 'A-Frame scripts present but not loaded - possibly blocked by ad blocker or network issues' 
+                    });
+                } else {
+                    return Promise.resolve({ 
+                        compatible: false, 
+                        reason: 'A-Frame scripts not found in document' 
+                    });
+                }
             }
             
             // Check A-Frame version (should be 1.3.0 or compatible)
@@ -384,7 +398,7 @@ const ARUtils = {
                             resolve({ compatible: true, reason: 'All checks passed' });
                         }
                     } else if (Date.now() - startTime > maxWaitTime) {
-                        resolve({ compatible: false, reason: 'AR.js failed to load within timeout' });
+                        resolve({ compatible: false, reason: 'AR.js failed to load within timeout - check network connection and ad blockers' });
                     } else {
                         setTimeout(checkARjs, 100);
                     }
@@ -394,7 +408,7 @@ const ARUtils = {
             });
             
         } catch (error) {
-            return { compatible: false, reason: error.message };
+            return Promise.resolve({ compatible: false, reason: error.message });
         }
     }
 };
