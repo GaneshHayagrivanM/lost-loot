@@ -279,16 +279,64 @@ const ARUtils = {
         return DeviceCapabilities.hasWebRTC();
     },
     
-    // Request camera permission
+    // Request camera permission with better error handling
     requestCameraPermission: async function() {
         try {
-            const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+            // Check if permission API is available
+            if (navigator.permissions) {
+                const permission = await navigator.permissions.query({ name: 'camera' });
+                if (permission.state === 'denied') {
+                    console.warn('Camera permission previously denied');
+                    return false;
+                }
+            }
+            
+            const stream = await navigator.mediaDevices.getUserMedia({ 
+                video: { 
+                    facingMode: 'environment', // Try rear camera first
+                    width: { ideal: 640 },
+                    height: { ideal: 480 }
+                } 
+            });
             stream.getTracks().forEach(track => track.stop());
+            console.log('Camera permission granted successfully');
             return true;
         } catch (error) {
             console.error('Camera permission denied:', error);
+            
+            // Try fallback to any camera
+            try {
+                const fallbackStream = await navigator.mediaDevices.getUserMedia({ video: true });
+                fallbackStream.getTracks().forEach(track => track.stop());
+                console.log('Camera permission granted with fallback');
+                return true;
+            } catch (fallbackError) {
+                console.error('Fallback camera permission also failed:', fallbackError);
+                return false;
+            }
+        }
+    },
+    
+    // Validate marker pattern files
+    validateMarkerFile: async function(url) {
+        try {
+            const response = await fetch(url);
+            if (!response.ok) {
+                console.warn(`Marker file not found: ${url}`);
+                return false;
+            }
+            const text = await response.text();
+            // Basic validation - pattern files should have content
+            return text.length > 1000; // Pattern files are typically several KB
+        } catch (error) {
+            console.error(`Error validating marker file ${url}:`, error);
             return false;
         }
+    },
+    
+    // Get available fallback markers
+    getFallbackMarkers: function() {
+        return ['hiro', 'kanji']; // Built-in AR.js markers
     },
     
     // Create A-Frame animation
@@ -299,6 +347,69 @@ const ARUtils = {
             dur: duration,
             loop: loop
         };
+    },
+    
+    // Check AR.js compatibility
+    checkARjsCompatibility: function() {
+        try {
+            // Check if A-Frame is loaded and has required version
+            if (typeof AFRAME === 'undefined') {
+                // Check if script tags are present but failed to load
+                const aframeScript = document.querySelector('script[src*="aframe"]');
+                const arjsScript = document.querySelector('script[src*="AR.js"]');
+                
+                if (aframeScript && arjsScript) {
+                    return Promise.resolve({ 
+                        compatible: false, 
+                        reason: 'A-Frame scripts present but not loaded - possibly blocked by ad blocker or network issues' 
+                    });
+                } else {
+                    return Promise.resolve({ 
+                        compatible: false, 
+                        reason: 'A-Frame scripts not found in document' 
+                    });
+                }
+            }
+            
+            // Check A-Frame version (should be 1.3.0 or compatible)
+            const aframeVersion = AFRAME.version;
+            if (aframeVersion && aframeVersion.startsWith('1.')) {
+                console.log('A-Frame version:', aframeVersion);
+            } else {
+                console.warn('Unknown or potentially incompatible A-Frame version:', aframeVersion);
+            }
+            
+            // Wait for AR.js to load (it might load asynchronously)
+            const maxWaitTime = 5000; // 5 seconds
+            const startTime = Date.now();
+            
+            return new Promise((resolve) => {
+                const checkARjs = () => {
+                    if (typeof AFRAME.components['arjs'] !== 'undefined') {
+                        // Check for required AR components
+                        const requiredComponents = ['arjs'];
+                        const missingComponents = requiredComponents.filter(
+                            component => typeof AFRAME.components[component] === 'undefined'
+                        );
+                        
+                        if (missingComponents.length > 0) {
+                            resolve({ compatible: false, reason: `Missing components: ${missingComponents.join(', ')}` });
+                        } else {
+                            resolve({ compatible: true, reason: 'All checks passed' });
+                        }
+                    } else if (Date.now() - startTime > maxWaitTime) {
+                        resolve({ compatible: false, reason: 'AR.js failed to load within timeout - check network connection and ad blockers' });
+                    } else {
+                        setTimeout(checkARjs, 100);
+                    }
+                };
+                
+                checkARjs();
+            });
+            
+        } catch (error) {
+            return Promise.resolve({ compatible: false, reason: error.message });
+        }
     }
 };
 

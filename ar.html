@@ -36,7 +36,8 @@
         <!-- Checkpoint 1: Captain's Compass -->
         <a-marker
             id="marker-1"
-            preset ="hiro"
+            type="pattern"
+            url="assets/markers/marker-1.patt"
             markerhandler
             checkpoint="1"
             raycaster="objects: .interactive"
@@ -65,6 +66,55 @@
                 <!-- Compass needle -->
                 <a-cylinder
                     id="compass-needle"
+                    radius="0.02"
+                    height="0.4"
+                    color="#FF0000"
+                    position="0 0.7 0"
+                    rotation="0 0 0"
+                ></a-cylinder>
+                
+                <!-- Instructions -->
+                <a-text
+                    value="Point your device north to activate the compass!"
+                    position="0 -0.5 0"
+                    align="center"
+                    color="#FFFFFF"
+                    scale="1.5 1.5 1.5"
+                ></a-text>
+            </a-entity>
+        </a-marker>
+        
+        <!-- Fallback marker-1 using preset -->
+        <a-marker
+            id="marker-1-fallback"
+            preset="hiro"
+            markerhandler
+            checkpoint="1"
+            visible="false"
+            raycaster="objects: .interactive"
+            cursor="fuse: false; rayOrigin: mouse"
+        >
+            <a-entity id="checkpoint-1-fallback-content" visible="false">
+                <!-- Same content as primary marker -->
+                <a-box
+                    position="0 0.5 0"
+                    rotation="0 45 0"
+                    color="#8B4513"
+                    scale="0.5 0.5 0.5"
+                    class="interactive"
+                    animation="property: rotation; to: 0 405 0; loop: true; dur: 4000"
+                >
+                    <a-text
+                        value="Captain's Compass (Hiro)"
+                        position="0 1 0"
+                        align="center"
+                        color="#FFD700"
+                        scale="2 2 2"
+                    ></a-text>
+                </a-box>
+                
+                <!-- Compass needle -->
+                <a-cylinder
                     radius="0.02"
                     height="0.4"
                     color="#FF0000"
@@ -218,6 +268,23 @@
             </a-entity>
         </a-marker>
         
+        <!-- Fallback preset markers for better detection reliability -->
+        <a-marker id="marker-2-fallback" preset="kanji" markerhandler checkpoint="2" visible="false">
+            <a-entity id="checkpoint-2-fallback-content" visible="false">
+                <a-sphere radius="0.3" color="#4B0082" position="0 0.5 0" class="interactive">
+                    <a-text value="Kraken's Quiz (Kanji)" position="0 1 0" align="center" color="#FFD700" scale="2 2 2"></a-text>
+                </a-sphere>
+            </a-entity>
+        </a-marker>
+        
+        <!-- Additional fallback markers using different presets -->
+        <a-marker id="marker-3-fallback" preset="hiro" markerhandler checkpoint="3" visible="false">
+            <a-entity id="checkpoint-3-fallback-content" visible="false">
+                <a-cylinder radius="0.1" height="0.6" color="#2F4F4F" rotation="0 0 90" position="0 0.3 0" class="interactive"></a-cylinder>
+                <a-text value="Cannonball Accuracy (Hiro)" position="0 1 0" align="center" color="#FFD700" scale="1.5 1.5 1.5"></a-text>
+            </a-entity>
+        </a-marker>
+        
         <!-- Additional markers for other checkpoints would be defined similarly -->
         <!-- For brevity, I'll implement the remaining markers in the JavaScript -->
         
@@ -278,11 +345,34 @@
                     return;
                 }
                 
+                // Check AR.js compatibility first - with retry logic
+                let compatibilityCheck;
+                let retryCount = 0;
+                const maxRetries = 3;
+                
+                do {
+                    compatibilityCheck = await ARUtils.checkARjsCompatibility();
+                    if (!compatibilityCheck.compatible && retryCount < maxRetries) {
+                        console.log(`AR.js compatibility check failed (attempt ${retryCount + 1}/${maxRetries + 1}), retrying...`);
+                        await new Promise(resolve => setTimeout(resolve, 1000)); // Wait 1 second
+                        retryCount++;
+                    }
+                } while (!compatibilityCheck.compatible && retryCount <= maxRetries);
+                
+                if (!compatibilityCheck.compatible) {
+                    console.error('AR.js compatibility issue:', compatibilityCheck.reason);
+                    showError(`AR compatibility issue: ${compatibilityCheck.reason}. Please refresh the page and ensure A-Frame and AR.js are loaded.`);
+                    return;
+                }
+                
                 // Check AR support before proceeding
                 if (!await checkARSupport()) {
                     showError('AR is not supported on this device. Please use a device with camera support.');
                     return;
                 }
+                
+                // Validate marker files
+                await validateMarkerFiles();
                 
                 // Request camera permission early
                 const cameraPermission = await requestCameraPermission();
@@ -301,6 +391,14 @@
                 } else {
                     console.log('Waiting for A-Frame scene to load...');
                     scene.addEventListener('loaded', onSceneReady);
+                    
+                    // Add timeout for scene loading
+                    setTimeout(() => {
+                        if (!arSceneReady) {
+                            console.error('Scene loading timeout');
+                            showError('AR scene failed to load. Please refresh the page.');
+                        }
+                    }, 10000); // 10 second timeout
                 }
                 
                 requestDeviceOrientation();
@@ -310,6 +408,33 @@
                 showError('Failed to initialize AR view. Please refresh the page and try again.');
             }
         });
+        
+        async function validateMarkerFiles() {
+            console.log('Validating marker files...');
+            const markerUrls = [
+                'assets/markers/marker-1.patt',
+                'assets/markers/marker-2.patt',
+                'assets/markers/marker-3.patt',
+                'assets/markers/marker-4.patt',
+                'assets/markers/marker-5.patt',
+                'assets/markers/marker-6.patt',
+                'assets/markers/marker-7.patt',
+                'assets/markers/marker-8.patt'
+            ];
+            
+            const validationResults = await Promise.all(
+                markerUrls.map(url => ARUtils.validateMarkerFile(url))
+            );
+            
+            const failedMarkers = markerUrls.filter((url, index) => !validationResults[index]);
+            
+            if (failedMarkers.length > 0) {
+                console.warn('Some marker files failed validation:', failedMarkers);
+                showMessage(`Some marker patterns may not work properly. Fallback markers available.`);
+            } else {
+                console.log('All marker files validated successfully');
+            }
+        }
         
         async function checkARSupport() {
             try {
@@ -355,16 +480,64 @@
         function initializeARErrorHandling() {
             const scene = document.querySelector('#ar-scene');
             
-            // Handle AR.js errors
+            // Handle AR.js errors with specific error types
             scene.addEventListener('arError', (event) => {
                 console.error('AR Error:', event.detail);
-                showError('AR tracking error. Please ensure good lighting and try again.');
+                const errorType = event.detail?.type || 'unknown';
+                let errorMessage = 'AR tracking error. Please ensure good lighting and try again.';
+                
+                switch (errorType) {
+                    case 'camera':
+                        errorMessage = 'Camera error. Please check camera permissions and refresh the page.';
+                        break;
+                    case 'marker':
+                        errorMessage = 'Marker detection error. Please ensure the marker is visible and well-lit.';
+                        break;
+                    case 'webgl':
+                        errorMessage = 'WebGL error. Please try refreshing the page or use a different browser.';
+                        break;
+                    default:
+                        errorMessage = `AR error (${errorType}). Please ensure good lighting and try again.`;
+                }
+                
+                showError(errorMessage);
             });
             
-            // Handle camera errors
+            // Handle camera errors specifically
             scene.addEventListener('camera-error', (event) => {
                 console.error('Camera Error:', event.detail);
-                showError('Camera error. Please check camera permissions and try again.');
+                const errorDetail = event.detail?.message || 'Unknown camera error';
+                showError(`Camera error: ${errorDetail}. Please check camera permissions and try again.`);
+            });
+            
+            // Handle WebGL context lost
+            scene.addEventListener('webglcontextlost', (event) => {
+                console.error('WebGL context lost');
+                event.preventDefault();
+                showError('Graphics context lost. Please refresh the page.');
+            });
+            
+            // Handle WebGL context restored
+            scene.addEventListener('webglcontextrestored', (event) => {
+                console.log('WebGL context restored');
+                showMessage('Graphics context restored. AR should work normally now.');
+            });
+            
+            // Add global error handler for uncaught AR.js errors
+            window.addEventListener('error', (event) => {
+                if (event.message && event.message.includes('AR')) {
+                    console.error('Uncaught AR error:', event);
+                    showError('Unexpected AR error occurred. Please refresh the page.');
+                }
+            });
+            
+            // Add unhandled promise rejection handler
+            window.addEventListener('unhandledrejection', (event) => {
+                if (event.reason && typeof event.reason === 'object' && 
+                    (event.reason.message?.includes('AR') || event.reason.message?.includes('camera'))) {
+                    console.error('Unhandled AR promise rejection:', event);
+                    showError('AR initialization failed. Please refresh the page and allow camera access.');
+                }
             });
         }
         
@@ -380,7 +553,7 @@
         function initializeMarkerHandlers() {
             console.log('Registering marker handler component...');
             
-            // Register marker found/lost handlers
+            // Register enhanced marker found/lost handlers with fallback support
             AFRAME.registerComponent('markerhandler', {
                 schema: {
                     checkpoint: {type: 'number'}
@@ -388,17 +561,39 @@
                 
                 init: function() {
                     console.log(`Initializing marker handler for checkpoint ${this.data.checkpoint}`);
+                    const markerId = this.el.id;
+                    const isFallback = markerId.includes('fallback');
                     
                     this.el.addEventListener('markerFound', () => {
                         const checkpoint = this.data.checkpoint;
-                        console.log(`✅ Marker ${checkpoint} found - activating checkpoint`);
-                        activateCheckpoint(checkpoint);
+                        console.log(`✅ Marker ${checkpoint} found - ${markerId} (${isFallback ? 'fallback' : 'primary'})`);
+                        
+                        // Hide fallback markers when primary is found and vice versa
+                        if (!isFallback) {
+                            hideFallbackMarker(checkpoint);
+                        } else {
+                            hidePrimaryMarker(checkpoint);
+                        }
+                        
+                        activateCheckpoint(checkpoint, isFallback);
                     });
                     
                     this.el.addEventListener('markerLost', () => {
                         const checkpoint = this.data.checkpoint;
-                        console.log(`❌ Marker ${checkpoint} lost - deactivating checkpoint`);
-                        deactivateCheckpoint();
+                        console.log(`❌ Marker ${checkpoint} lost - ${markerId} (${isFallback ? 'fallback' : 'primary'})`);
+                        
+                        // Small delay before deactivating to avoid flickering
+                        setTimeout(() => {
+                            if (!isAnyMarkerVisible(checkpoint)) {
+                                deactivateCheckpoint();
+                            }
+                        }, 500);
+                    });
+                    
+                    // Add error handling for marker events
+                    this.el.addEventListener('markerError', (event) => {
+                        console.error(`Marker error for ${markerId}:`, event.detail);
+                        showError(`Marker detection error. Please ensure good lighting and try again.`);
                     });
                 }
             });
@@ -406,8 +601,30 @@
             console.log('Marker handler component registered successfully');
         }
         
-        function activateCheckpoint(checkpointNumber) {
-            console.log(`Activating checkpoint ${checkpointNumber}...`);
+        function hideFallbackMarker(checkpoint) {
+            const fallbackMarker = document.querySelector(`#marker-${checkpoint}-fallback`);
+            if (fallbackMarker) {
+                fallbackMarker.setAttribute('visible', 'false');
+            }
+        }
+        
+        function hidePrimaryMarker(checkpoint) {
+            const primaryMarker = document.querySelector(`#marker-${checkpoint}`);
+            if (primaryMarker) {
+                primaryMarker.setAttribute('visible', 'false');
+            }
+        }
+        
+        function isAnyMarkerVisible(checkpoint) {
+            const primaryMarker = document.querySelector(`#marker-${checkpoint}`);
+            const fallbackMarker = document.querySelector(`#marker-${checkpoint}-fallback`);
+            
+            return (primaryMarker && primaryMarker.object3D.visible) || 
+                   (fallbackMarker && fallbackMarker.object3D.visible);
+        }
+        
+        function activateCheckpoint(checkpointNumber, isFallback = false) {
+            console.log(`Activating checkpoint ${checkpointNumber}... (${isFallback ? 'fallback' : 'primary'} marker)`);
             
             const state = GameState.getState();
             
@@ -429,23 +646,38 @@
             
             currentCheckpoint = checkpointNumber;
             
-            // Show checkpoint content
-            const content = document.querySelector(`#checkpoint-${checkpointNumber}-content`);
+            // Show appropriate checkpoint content (primary or fallback)
+            const contentId = isFallback ? 
+                `#checkpoint-${checkpointNumber}-fallback-content` : 
+                `#checkpoint-${checkpointNumber}-content`;
+            
+            const content = document.querySelector(contentId);
             if (content) {
                 content.setAttribute('visible', 'true');
-                console.log(`Checkpoint ${checkpointNumber} content made visible`);
+                console.log(`Checkpoint ${checkpointNumber} content made visible (${isFallback ? 'fallback' : 'primary'})`);
             } else {
-                console.warn(`Checkpoint ${checkpointNumber} content element not found`);
+                console.warn(`Checkpoint ${checkpointNumber} content element not found: ${contentId}`);
+                
+                // Try fallback content if primary not found
+                if (!isFallback) {
+                    const fallbackContent = document.querySelector(`#checkpoint-${checkpointNumber}-fallback-content`);
+                    if (fallbackContent) {
+                        fallbackContent.setAttribute('visible', 'true');
+                        console.log(`Using fallback content for checkpoint ${checkpointNumber}`);
+                    }
+                }
             }
             
             // Update UI
-            document.getElementById('ar-title').textContent = getCheckpointName(checkpointNumber);
-            document.getElementById('current-checkpoint').textContent = `Checkpoint: ${checkpointNumber}`;
+            const markerType = isFallback ? ' (Fallback)' : '';
+            document.getElementById('ar-title').textContent = getCheckpointName(checkpointNumber) + markerType;
+            document.getElementById('current-checkpoint').textContent = `Checkpoint: ${checkpointNumber}${markerType}`;
             
             // Initialize minigame
             try {
                 initializeMinigame(checkpointNumber);
                 console.log(`Checkpoint ${checkpointNumber} activated successfully`);
+                showMessage(`Checkpoint ${checkpointNumber} activated! ${isFallback ? 'Using fallback marker.' : ''}`);
             } catch (error) {
                 console.error(`Error initializing minigame for checkpoint ${checkpointNumber}:`, error);
                 showError('Error starting minigame. Please try scanning the marker again.');
@@ -456,10 +688,26 @@
             if (currentCheckpoint) {
                 console.log(`Deactivating checkpoint ${currentCheckpoint}...`);
                 
-                // Hide checkpoint content
-                const content = document.querySelector(`#checkpoint-${currentCheckpoint}-content`);
-                if (content) {
-                    content.setAttribute('visible', 'false');
+                // Hide both primary and fallback content
+                const primaryContent = document.querySelector(`#checkpoint-${currentCheckpoint}-content`);
+                const fallbackContent = document.querySelector(`#checkpoint-${currentCheckpoint}-fallback-content`);
+                
+                if (primaryContent) {
+                    primaryContent.setAttribute('visible', 'false');
+                }
+                if (fallbackContent) {
+                    fallbackContent.setAttribute('visible', 'false');
+                }
+                
+                // Re-enable both primary and fallback markers for future detection
+                const primaryMarker = document.querySelector(`#marker-${currentCheckpoint}`);
+                const fallbackMarker = document.querySelector(`#marker-${currentCheckpoint}-fallback`);
+                
+                if (primaryMarker) {
+                    primaryMarker.setAttribute('visible', 'true');
+                }
+                if (fallbackMarker) {
+                    fallbackMarker.setAttribute('visible', 'true');
                 }
                 
                 // Reset UI
