@@ -222,49 +222,523 @@
         <!-- Checkpoint 4: Treasure Chest Lock -->
         <a-marker id="marker-4" type="pattern" url="assets/markers/marker-4.patt" markerhandler checkpoint="4">
             <a-entity id="checkpoint-4-content" visible="false">
-                <a-box position="0 0.5 0" color="#8B4513" scale="0.6 0.4 0.4">
-                    <a-text value="Treasure Chest Lock" position="0 1 0" align="center" color="#FFD700" scale="1.5 1.5 1.5"></a-text>
+                <!-- Enhanced treasure chest with lock mechanism -->
+                <a-box 
+                    position="0 0.5 0" 
+                    color="#8B4513" 
+                    scale="0.8 0.5 0.6"
+                    class="interactive"
+                    animation__hover="property: scale; to: 0.85 0.52 0.62; startEvents: mouseenter; endEvents: mouseleave; dur: 200"
+                >
+                    <!-- Lock mechanism on front -->
+                    <a-cylinder 
+                        radius="0.15" 
+                        height="0.05" 
+                        color="#C0C0C0" 
+                        position="0 0 0.31"
+                        class="interactive"
+                    ></a-cylinder>
+                    <a-torus 
+                        radius="0.1" 
+                        radius-tubular="0.02" 
+                        color="#FFD700" 
+                        position="0 0.1 0.31"
+                        rotation="0 0 0"
+                        animation="property: rotation; to: 0 0 360; dur: 3000; loop: true"
+                    ></a-torus>
+                    
+                    <!-- Chest decorations -->
+                    <a-box 
+                        position="0.25 0 0.25" 
+                        scale="0.1 0.4 0.1" 
+                        color="#CD7F32"
+                    ></a-box>
+                    <a-box 
+                        position="-0.25 0 0.25" 
+                        scale="0.1 0.4 0.1" 
+                        color="#CD7F32"
+                    ></a-box>
                 </a-box>
+                
+                <!-- Floating keys around the chest -->
+                <a-entity 
+                    animation="property: rotation; to: 0 360 0; dur: 5000; loop: true"
+                >
+                    <a-box 
+                        position="0.6 0.8 0" 
+                        scale="0.15 0.05 0.4" 
+                        color="#FFD700"
+                        class="interactive"
+                    ></a-box>
+                    <a-cylinder 
+                        position="0.6 0.8 -0.2" 
+                        radius="0.08" 
+                        height="0.05" 
+                        color="#FFD700"
+                    ></a-cylinder>
+                </a-entity>
+                
+                <a-text 
+                    value="Treasure Chest Lock\nFind the right combination!" 
+                    position="0 1.2 0" 
+                    align="center" 
+                    color="#FFD700" 
+                    scale="1.2 1.2 1.2"
+                ></a-text>
             </a-entity>
         </a-marker>
         
         <!-- Checkpoint 5: Pirate's Balance -->
         <a-marker id="marker-5" type="pattern" url="assets/markers/marker-5.patt" markerhandler checkpoint="5">
             <a-entity id="checkpoint-5-content" visible="false">
-                <a-cylinder radius="0.3" height="0.1" color="#8B4513" position="0 0.5 0">
-                    <a-text value="Pirate's Balance" position="0 1 0" align="center" color="#FFD700" scale="1.5 1.5 1.5"></a-text>
-                </a-cylinder>
+                <!-- Enhanced balance scale -->
+                <a-cylinder 
+                    radius="0.02" 
+                    height="1.0" 
+                    color="#8B4513" 
+                    position="0 0.5 0"
+                ></a-cylinder>
+                
+                <!-- Balance beam -->
+                <a-box 
+                    position="0 1.0 0" 
+                    scale="1.2 0.05 0.1" 
+                    color="#CD7F32"
+                    class="interactive"
+                    animation="property: rotation; to: 0 0 5; dur: 2000; direction: alternate; loop: true"
+                ></a-box>
+                
+                <!-- Left scale plate -->
+                <a-entity position="-0.5 0.9 0">
+                    <a-cylinder 
+                        radius="0.2" 
+                        height="0.02" 
+                        color="#C0C0C0"
+                        class="interactive"
+                    ></a-cylinder>
+                    <!-- Chains -->
+                    <a-cylinder 
+                        radius="0.01" 
+                        height="0.15" 
+                        color="#696969" 
+                        position="0.15 0.075 0"
+                    ></a-cylinder>
+                    <a-cylinder 
+                        radius="0.01" 
+                        height="0.15" 
+                        color="#696969" 
+                        position="-0.15 0.075 0"
+                    ></a-cylinder>
+                    <!-- Treasure on left plate -->
+                    <a-sphere 
+                        radius="0.08" 
+                        color="#FFD700" 
+                        position="0 0.1 0"
+                        animation="property: position; to: 0 0.15 0; dur: 1500; direction: alternate; loop: true"
+                    ></a-sphere>
+                </a-entity>
+                
+                <!-- Right scale plate -->
+                <a-entity position="0.5 0.9 0">
+                    <a-cylinder 
+                        radius="0.2" 
+                        height="0.02" 
+                        color="#C0C0C0"
+                        class="interactive"
+                    ></a-cylinder>
+                    <!-- Chains -->
+                    <a-cylinder 
+                        radius="0.01" 
+                        height="0.15" 
+                        color="#696969" 
+                        position="0.15 0.075 0"
+                    ></a-cylinder>
+                    <a-cylinder 
+                        radius="0.01" 
+                        height="0.15" 
+                        color="#696969" 
+                        position="-0.15 0.075 0"
+                    ></a-cylinder>
+                    <!-- Weight stones on right plate -->
+                    <a-box 
+                        scale="0.1 0.1 0.1" 
+                        color="#696969" 
+                        position="0 0.08 0"
+                    ></a-box>
+                    <a-box 
+                        scale="0.08 0.08 0.08" 
+                        color="#2F4F4F" 
+                        position="0.05 0.15 0.05"
+                    ></a-box>
+                </a-entity>
+                
+                <a-text 
+                    value="Pirate's Balance\nBalance the treasure!" 
+                    position="0 1.4 0" 
+                    align="center" 
+                    color="#FFD700" 
+                    scale="1.2 1.2 1.2"
+                ></a-text>
             </a-entity>
         </a-marker>
         
         <!-- Checkpoint 6: Skeleton Duel -->
         <a-marker id="marker-6" type="pattern" url="assets/markers/marker-6.patt" markerhandler checkpoint="6">
             <a-entity id="checkpoint-6-content" visible="false">
-                <a-sphere radius="0.2" color="#F5F5DC" position="0 0.7 0">
-                    <a-text value="Skeleton Duel" position="0 1 0" align="center" color="#FFD700" scale="1.5 1.5 1.5"></a-text>
+                <!-- Enhanced skeleton figure -->
+                <!-- Head -->
+                <a-sphere 
+                    radius="0.15" 
+                    color="#F5F5DC" 
+                    position="0 0.85 0"
+                    class="interactive"
+                    animation="property: rotation; to: 10 0 0; dur: 2000; direction: alternate; loop: true"
+                >
+                    <!-- Eye sockets -->
+                    <a-sphere radius="0.03" color="#000000" position="0.05 0.02 0.12"></a-sphere>
+                    <a-sphere radius="0.03" color="#000000" position="-0.05 0.02 0.12"></a-sphere>
+                    <!-- Glowing eyes -->
+                    <a-sphere 
+                        radius="0.02" 
+                        color="#FF0000" 
+                        position="0.05 0.02 0.13"
+                        animation="property: scale; to: 1.5 1.5 1.5; dur: 1000; direction: alternate; loop: true"
+                    ></a-sphere>
+                    <a-sphere 
+                        radius="0.02" 
+                        color="#FF0000" 
+                        position="-0.05 0.02 0.13"
+                        animation="property: scale; to: 1.5 1.5 1.5; dur: 1000; direction: alternate; loop: true"
+                    ></a-sphere>
                 </a-sphere>
-                <a-cylinder radius="0.1" height="0.6" color="#F5F5DC" position="0 0.3 0"></a-cylinder>
+                
+                <!-- Neck/Spine -->
+                <a-cylinder 
+                    radius="0.03" 
+                    height="0.3" 
+                    color="#F5F5DC" 
+                    position="0 0.55 0"
+                ></a-cylinder>
+                
+                <!-- Torso (ribcage) -->
+                <a-entity position="0 0.4 0">
+                    <a-cylinder radius="0.1" height="0.4" color="#F5F5DC" class="interactive"></a-cylinder>
+                    <!-- Ribs -->
+                    <a-torus radius="0.08" radius-tubular="0.01" color="#E0E0E0" position="0 0.1 0"></a-torus>
+                    <a-torus radius="0.09" radius-tubular="0.01" color="#E0E0E0" position="0 0.05 0"></a-torus>
+                    <a-torus radius="0.08" radius-tubular="0.01" color="#E0E0E0" position="0 0 0"></a-torus>
+                    <a-torus radius="0.07" radius-tubular="0.01" color="#E0E0E0" position="0 -0.05 0"></a-torus>
+                </a-entity>
+                
+                <!-- Arms -->
+                <a-entity>
+                    <!-- Left arm -->
+                    <a-cylinder 
+                        radius="0.02" 
+                        height="0.35" 
+                        color="#F5F5DC" 
+                        position="-0.15 0.5 0" 
+                        rotation="0 0 -30"
+                        animation="property: rotation; to: 0 0 -45; dur: 1500; direction: alternate; loop: true"
+                    ></a-cylinder>
+                    <!-- Right arm with sword -->
+                    <a-cylinder 
+                        radius="0.02" 
+                        height="0.35" 
+                        color="#F5F5DC" 
+                        position="0.15 0.5 0" 
+                        rotation="0 0 30"
+                        animation="property: rotation; to: 0 0 45; dur: 1500; direction: alternate; loop: true"
+                    ></a-cylinder>
+                    <!-- Sword -->
+                    <a-entity 
+                        position="0.25 0.7 0"
+                        animation="property: rotation; to: 0 0 60; dur: 1500; direction: alternate; loop: true"
+                    >
+                        <a-cylinder radius="0.01" height="0.3" color="#C0C0C0" rotation="0 0 90"></a-cylinder>
+                        <a-box scale="0.15 0.03 0.01" color="#8B4513" position="0.15 0 0"></a-box>
+                    </a-entity>
+                </a-entity>
+                
+                <!-- Legs -->
+                <a-cylinder 
+                    radius="0.02" 
+                    height="0.4" 
+                    color="#F5F5DC" 
+                    position="-0.05 0.05 0"
+                ></a-cylinder>
+                <a-cylinder 
+                    radius="0.02" 
+                    height="0.4" 
+                    color="#F5F5DC" 
+                    position="0.05 0.05 0"
+                ></a-cylinder>
+                
+                <!-- Ghostly aura -->
+                <a-sphere 
+                    radius="0.6" 
+                    color="#00FF00" 
+                    opacity="0.1" 
+                    position="0 0.5 0"
+                    animation="property: scale; to: 1.2 1.2 1.2; dur: 2000; direction: alternate; loop: true"
+                ></a-sphere>
+                
+                <a-text 
+                    value="Skeleton Duel\nDefeat the undead pirate!" 
+                    position="0 1.3 0" 
+                    align="center" 
+                    color="#FFD700" 
+                    scale="1.2 1.2 1.2"
+                ></a-text>
             </a-entity>
         </a-marker>
         
         <!-- Checkpoint 7: Map Assembly -->
         <a-marker id="marker-7" type="pattern" url="assets/markers/marker-7.patt" markerhandler checkpoint="7">
             <a-entity id="checkpoint-7-content" visible="false">
-                <a-plane width="0.8" height="0.6" color="#DEB887" position="0 0.5 0" rotation="-90 0 0">
-                    <a-text value="Map Assembly" position="0 0 1" align="center" color="#8B4513" scale="2 2 2"></a-text>
-                </a-plane>
+                <!-- Enhanced treasure map with multiple pieces -->
+                <a-entity position="0 0.5 0" rotation="-15 0 0">
+                    <!-- Main map base -->
+                    <a-plane 
+                        width="1.0" 
+                        height="0.8" 
+                        color="#DEB887" 
+                        position="0 0 0"
+                        class="interactive"
+                        animation="property: rotation; to: -10 0 0; dur: 3000; direction: alternate; loop: true"
+                    >
+                        <!-- Map grid lines -->
+                        <a-entity>
+                            <a-box scale="1.0 0.01 0.01" color="#8B4513" position="0 0.2 0.01"></a-box>
+                            <a-box scale="1.0 0.01 0.01" color="#8B4513" position="0 0 0.01"></a-box>
+                            <a-box scale="1.0 0.01 0.01" color="#8B4513" position="0 -0.2 0.01"></a-box>
+                            <a-box scale="0.01 0.8 0.01" color="#8B4513" position="0.3 0 0.01"></a-box>
+                            <a-box scale="0.01 0.8 0.01" color="#8B4513" position="0 0 0.01"></a-box>
+                            <a-box scale="0.01 0.8 0.01" color="#8B4513" position="-0.3 0 0.01"></a-box>
+                        </a-entity>
+                        
+                        <!-- Islands and landmarks -->
+                        <a-circle radius="0.08" color="#228B22" position="0.2 0.1 0.02"></a-circle>
+                        <a-circle radius="0.05" color="#228B22" position="-0.3 0.2 0.02"></a-circle>
+                        <a-circle radius="0.06" color="#228B22" position="0.1 -0.2 0.02"></a-circle>
+                        
+                        <!-- X marks the spot -->
+                        <a-entity position="0.2 0.1 0.03">
+                            <a-box scale="0.15 0.02 0.01" color="#FF0000" rotation="0 0 45"></a-box>
+                            <a-box scale="0.15 0.02 0.01" color="#FF0000" rotation="0 0 -45"></a-box>
+                        </a-entity>
+                    </a-plane>
+                    
+                    <!-- Floating map pieces that need to be assembled -->
+                    <a-entity 
+                        animation="property: rotation; to: 0 360 0; dur: 8000; loop: true"
+                    >
+                        <!-- Top piece -->
+                        <a-plane 
+                            width="0.3" 
+                            height="0.2" 
+                            color="#D2B48C" 
+                            position="0.8 0.6 0.1"
+                            class="interactive"
+                            animation__float="property: position; to: 0.8 0.8 0.1; dur: 2000; direction: alternate; loop: true"
+                        ></a-plane>
+                        
+                        <!-- Left piece -->
+                        <a-plane 
+                            width="0.25" 
+                            height="0.3" 
+                            color="#D2B48C" 
+                            position="-0.8 0.2 0.1"
+                            class="interactive"
+                            animation__float="property: position; to: -0.8 0.4 0.1; dur: 2500; direction: alternate; loop: true"
+                        ></a-plane>
+                        
+                        <!-- Right piece -->
+                        <a-plane 
+                            width="0.2" 
+                            height="0.25" 
+                            color="#D2B48C" 
+                            position="0.7 -0.4 0.1"
+                            class="interactive"
+                            animation__float="property: position; to: 0.7 -0.2 0.1; dur: 3000; direction: alternate; loop: true"
+                        ></a-plane>
+                    </a-entity>
+                    
+                    <!-- Compass rose -->
+                    <a-entity position="0.35 0.25 0.05">
+                        <a-ring 
+                            radius-inner="0.05" 
+                            radius-outer="0.08" 
+                            color="#8B4513"
+                            animation="property: rotation; to: 0 0 360; dur: 10000; loop: true"
+                        ></a-ring>
+                        <a-cone 
+                            radius-bottom="0.02" 
+                            height="0.06" 
+                            color="#FF0000" 
+                            position="0 0 0.01"
+                        ></a-cone>
+                    </a-entity>
+                </a-entity>
+                
+                <a-text 
+                    value="Map Assembly\nCollect the missing pieces!" 
+                    position="0 1.2 0" 
+                    align="center" 
+                    color="#FFD700" 
+                    scale="1.2 1.2 1.2"
+                ></a-text>
             </a-entity>
         </a-marker>
         
         <!-- Checkpoint 8: The Lost Loot -->
         <a-marker id="marker-8" type="pattern" url="assets/markers/marker-8.patt" markerhandler checkpoint="8">
             <a-entity id="checkpoint-8-content" visible="false">
-                <a-box position="0 0.5 0" color="#FFD700" scale="0.5 0.3 0.5">
-                    <a-text value="The Lost Loot" position="0 1 0" align="center" color="#8B4513" scale="1.5 1.5 1.5"></a-text>
-                </a-box>
-                <a-sphere radius="0.1" color="#FFD700" position="0.2 0.8 0.2"></a-sphere>
-                <a-sphere radius="0.1" color="#FFD700" position="-0.2 0.8 0.2"></a-sphere>
-                <a-sphere radius="0.1" color="#FFD700" position="0 0.8 -0.2"></a-sphere>
+                <!-- Enhanced treasure hoard -->
+                <!-- Main treasure chest -->
+                <a-entity position="0 0.4 0">
+                    <a-box 
+                        position="0 0 0" 
+                        color="#8B4513" 
+                        scale="0.8 0.4 0.6"
+                        class="interactive"
+                        animation="property: rotation; to: 0 5 0; dur: 2000; direction: alternate; loop: true"
+                    >
+                        <!-- Chest lid (open) -->
+                        <a-box 
+                            color="#654321" 
+                            scale="1.02 0.25 1.02" 
+                            position="0 0.4 -0.3" 
+                            rotation="45 0 0"
+                            animation="property: rotation; to: 60 0 0; dur: 3000; direction: alternate; loop: true"
+                        ></a-box>
+                        
+                        <!-- Gold decorations -->
+                        <a-cylinder radius="0.05" height="0.02" color="#FFD700" position="0.3 0 0.31"></a-cylinder>
+                        <a-cylinder radius="0.05" height="0.02" color="#FFD700" position="-0.3 0 0.31"></a-cylinder>
+                    </a-box>
+                    
+                    <!-- Overflowing treasure -->
+                    <a-entity position="0 0.3 0">
+                        <!-- Gold coins -->
+                        <a-cylinder 
+                            radius="0.05" 
+                            height="0.01" 
+                            color="#FFD700" 
+                            position="0.1 0.2 0.1"
+                            animation="property: position; to: 0.1 0.35 0.1; dur: 2000; direction: alternate; loop: true"
+                        ></a-cylinder>
+                        <a-cylinder 
+                            radius="0.05" 
+                            height="0.01" 
+                            color="#FFD700" 
+                            position="-0.1 0.25 0.15"
+                            animation="property: position; to: -0.1 0.4 0.15; dur: 2500; direction: alternate; loop: true"
+                        ></a-cylinder>
+                        <a-cylinder 
+                            radius="0.05" 
+                            height="0.01" 
+                            color="#FFD700" 
+                            position="0.05 0.3 -0.1"
+                            animation="property: position; to: 0.05 0.45 -0.1; dur: 1800; direction: alternate; loop: true"
+                        ></a-cylinder>
+                        
+                        <!-- Precious gems -->
+                        <a-octahedron 
+                            radius="0.04" 
+                            color="#FF69B4" 
+                            position="0.2 0.25 0"
+                            animation="property: rotation; to: 360 360 360; dur: 4000; loop: true"
+                        ></a-octahedron>
+                        <a-octahedron 
+                            radius="0.03" 
+                            color="#00CED1" 
+                            position="-0.15 0.3 0.1"
+                            animation="property: rotation; to: 360 360 360; dur: 3500; loop: true"
+                        ></a-octahedron>
+                        <a-octahedron 
+                            radius="0.035" 
+                            color="#32CD32" 
+                            position="0 0.35 0.2"
+                            animation="property: rotation; to: 360 360 360; dur: 4500; loop: true"
+                        ></a-octahedron>
+                    </a-entity>
+                </a-entity>
+                
+                <!-- Scattered treasure around the chest -->
+                <a-entity 
+                    animation="property: rotation; to: 0 360 0; dur: 12000; loop: true"
+                >
+                    <!-- Gold piles -->
+                    <a-sphere 
+                        radius="0.1" 
+                        color="#FFD700" 
+                        position="0.6 0.1 0.3"
+                        animation__bounce="property: scale; to: 1.1 1.1 1.1; dur: 1500; direction: alternate; loop: true"
+                    ></a-sphere>
+                    <a-sphere 
+                        radius="0.08" 
+                        color="#FFD700" 
+                        position="-0.5 0.08 0.4"
+                        animation__bounce="property: scale; to: 1.15 1.15 1.15; dur: 2000; direction: alternate; loop: true"
+                    ></a-sphere>
+                    <a-sphere 
+                        radius="0.12" 
+                        color="#FFD700" 
+                        position="0.4 0.12 -0.5"
+                        animation__bounce="property: scale; to: 1.2 1.2 1.2; dur: 1800; direction: alternate; loop: true"
+                    ></a-sphere>
+                    
+                    <!-- Treasure cups and goblets -->
+                    <a-cylinder 
+                        radius="0.06" 
+                        height="0.15" 
+                        color="#C0C0C0" 
+                        position="-0.7 0.075 0"
+                        animation="property: rotation; to: 0 0 10; dur: 2500; direction: alternate; loop: true"
+                    ></a-cylinder>
+                    <a-cylinder 
+                        radius="0.05" 
+                        height="0.12" 
+                        color="#FFD700" 
+                        position="0.7 0.06 -0.2"
+                        animation="property: rotation; to: 0 0 -8; dur: 2200; direction: alternate; loop: true"
+                    ></a-cylinder>
+                </a-entity>
+                
+                <!-- Glittering particle effect simulation -->
+                <a-entity position="0 0.8 0">
+                    <a-sphere 
+                        radius="0.01" 
+                        color="#FFD700" 
+                        opacity="0.7"
+                        position="0.3 0 0.2"
+                        animation="property: position; to: 0.3 0.5 0.2; dur: 3000; direction: alternate; loop: true"
+                    ></a-sphere>
+                    <a-sphere 
+                        radius="0.01" 
+                        color="#FFD700" 
+                        opacity="0.7"
+                        position="-0.2 0 0.3"
+                        animation="property: position; to: -0.2 0.4 0.3; dur: 2500; direction: alternate; loop: true"
+                    ></a-sphere>
+                    <a-sphere 
+                        radius="0.01" 
+                        color="#FFD700" 
+                        opacity="0.7"
+                        position="0.1 0 -0.2"
+                        animation="property: position; to: 0.1 0.6 -0.2; dur: 3500; direction: alternate; loop: true"
+                    ></a-sphere>
+                </a-entity>
+                
+                <a-text 
+                    value="The Lost Loot!\nYou found the treasure!" 
+                    position="0 1.3 0" 
+                    align="center" 
+                    color="#FFD700" 
+                    scale="1.3 1.3 1.3"
+                    animation="property: scale; to: 1.4 1.4 1.4; dur: 2000; direction: alternate; loop: true"
+                ></a-text>
             </a-entity>
         </a-marker>
         
@@ -285,7 +759,57 @@
             </a-entity>
         </a-marker>
         
-        <!-- Additional markers for other checkpoints would be defined similarly -->
+        <!-- Additional fallback markers for checkpoints 4-8 for better detection reliability -->
+        <a-marker id="marker-4-fallback" preset="kanji" markerhandler checkpoint="4" visible="false">
+            <a-entity id="checkpoint-4-fallback-content" visible="false">
+                <a-box position="0 0.5 0" color="#8B4513" scale="0.6 0.4 0.4" class="interactive">
+                    <a-text value="Treasure Chest Lock (Kanji)" position="0 1 0" align="center" color="#FFD700" scale="1.2 1.2 1.2"></a-text>
+                    <a-cylinder radius="0.1" height="0.05" color="#C0C0C0" position="0 0 0.21"></a-cylinder>
+                </a-box>
+            </a-entity>
+        </a-marker>
+        
+        <a-marker id="marker-5-fallback" preset="hiro" markerhandler checkpoint="5" visible="false">
+            <a-entity id="checkpoint-5-fallback-content" visible="false">
+                <a-cylinder radius="0.02" height="0.8" color="#8B4513" position="0 0.4 0" class="interactive"></a-cylinder>
+                <a-box position="0 0.8 0" scale="1.0 0.05 0.1" color="#CD7F32" class="interactive"></a-box>
+                <a-text value="Pirate's Balance (Hiro)" position="0 1.2 0" align="center" color="#FFD700" scale="1.2 1.2 1.2"></a-text>
+            </a-entity>
+        </a-marker>
+        
+        <a-marker id="marker-6-fallback" preset="kanji" markerhandler checkpoint="6" visible="false">
+            <a-entity id="checkpoint-6-fallback-content" visible="false">
+                <a-sphere radius="0.15" color="#F5F5DC" position="0 0.7 0" class="interactive">
+                    <a-sphere radius="0.02" color="#FF0000" position="0.05 0.02 0.13"></a-sphere>
+                    <a-sphere radius="0.02" color="#FF0000" position="-0.05 0.02 0.13"></a-sphere>
+                </a-sphere>
+                <a-cylinder radius="0.08" height="0.4" color="#F5F5DC" position="0 0.35 0" class="interactive"></a-cylinder>
+                <a-text value="Skeleton Duel (Kanji)" position="0 1.2 0" align="center" color="#FFD700" scale="1.2 1.2 1.2"></a-text>
+            </a-entity>
+        </a-marker>
+        
+        <a-marker id="marker-7-fallback" preset="hiro" markerhandler checkpoint="7" visible="false">
+            <a-entity id="checkpoint-7-fallback-content" visible="false">
+                <a-plane width="0.8" height="0.6" color="#DEB887" position="0 0.5 0" rotation="-10 0 0" class="interactive">
+                    <a-box scale="0.1 0.01 0.01" color="#8B4513" position="0.2 0.1 0.01"></a-box>
+                    <a-box scale="0.1 0.01 0.01" color="#FF0000" position="0.2 0.1 0.02" rotation="0 0 45"></a-box>
+                    <a-box scale="0.1 0.01 0.01" color="#FF0000" position="0.2 0.1 0.02" rotation="0 0 -45"></a-box>
+                </a-plane>
+                <a-text value="Map Assembly (Hiro)" position="0 1.1 0" align="center" color="#FFD700" scale="1.2 1.2 1.2"></a-text>
+            </a-entity>
+        </a-marker>
+        
+        <a-marker id="marker-8-fallback" preset="kanji" markerhandler checkpoint="8" visible="false">
+            <a-entity id="checkpoint-8-fallback-content" visible="false">
+                <a-box position="0 0.5 0" color="#FFD700" scale="0.6 0.3 0.5" class="interactive">
+                    <a-sphere radius="0.08" color="#FFD700" position="0.2 0.5 0.2"></a-sphere>
+                    <a-sphere radius="0.08" color="#FFD700" position="-0.2 0.5 0.2"></a-sphere>
+                    <a-sphere radius="0.08" color="#FFD700" position="0 0.5 -0.2"></a-sphere>
+                </a-box>
+                <a-text value="The Lost Loot! (Kanji)" position="0 1.2 0" align="center" color="#FFD700" scale="1.2 1.2 1.2"></a-text>
+            </a-entity>
+        </a-marker>
+        
         <!-- For brevity, I'll implement the remaining markers in the JavaScript -->
         
         <!-- Camera -->
@@ -339,8 +863,23 @@
             console.log('DOM loaded, initializing AR view...');
             
             try {
-                // Check if team is logged in
-                if (!GameState.isInitialized()) {
+                // Check if team is logged in with enhanced error handling
+                let gameInitialized = false;
+                try {
+                    if (GameState && typeof GameState.isInitialized === 'function') {
+                        gameInitialized = GameState.isInitialized();
+                        console.log('GameState initialization check:', gameInitialized);
+                    } else {
+                        console.warn('GameState not available or isInitialized method missing');
+                    }
+                } catch (error) {
+                    console.error('Error checking GameState initialization:', error);
+                    showMessage('Game state unavailable - continuing with offline AR functionality');
+                }
+                
+                // Only redirect if GameState is available and not initialized
+                if (GameState && typeof GameState.isInitialized === 'function' && !gameInitialized) {
+                    console.log('Game not initialized, redirecting to index.html');
                     window.location.href = 'index.html';
                     return;
                 }
@@ -602,42 +1141,114 @@
         }
         
         function hideFallbackMarker(checkpoint) {
-            const fallbackMarker = document.querySelector(`#marker-${checkpoint}-fallback`);
-            if (fallbackMarker) {
-                fallbackMarker.setAttribute('visible', 'false');
+            try {
+                const fallbackMarker = document.querySelector(`#marker-${checkpoint}-fallback`);
+                if (fallbackMarker) {
+                    fallbackMarker.setAttribute('visible', 'false');
+                    console.log(`🔒 Hidden fallback marker for checkpoint ${checkpoint}`);
+                } else {
+                    console.log(`ℹ️ No fallback marker found for checkpoint ${checkpoint} to hide`);
+                }
+            } catch (error) {
+                console.error(`Error hiding fallback marker for checkpoint ${checkpoint}:`, error);
             }
         }
         
         function hidePrimaryMarker(checkpoint) {
-            const primaryMarker = document.querySelector(`#marker-${checkpoint}`);
-            if (primaryMarker) {
-                primaryMarker.setAttribute('visible', 'false');
+            try {
+                const primaryMarker = document.querySelector(`#marker-${checkpoint}`);
+                if (primaryMarker) {
+                    primaryMarker.setAttribute('visible', 'false');
+                    console.log(`🔒 Hidden primary marker for checkpoint ${checkpoint}`);
+                } else {
+                    console.log(`ℹ️ No primary marker found for checkpoint ${checkpoint} to hide`);
+                }
+            } catch (error) {
+                console.error(`Error hiding primary marker for checkpoint ${checkpoint}:`, error);
+            }
+        }
+        
+        function showAllMarkersForCheckpoint(checkpoint) {
+            try {
+                const primaryMarker = document.querySelector(`#marker-${checkpoint}`);
+                const fallbackMarker = document.querySelector(`#marker-${checkpoint}-fallback`);
+                
+                if (primaryMarker) {
+                    primaryMarker.setAttribute('visible', 'true');
+                    console.log(`🔓 Enabled primary marker for checkpoint ${checkpoint}`);
+                }
+                if (fallbackMarker) {
+                    fallbackMarker.setAttribute('visible', 'true');
+                    console.log(`🔓 Enabled fallback marker for checkpoint ${checkpoint}`);
+                }
+            } catch (error) {
+                console.error(`Error showing markers for checkpoint ${checkpoint}:`, error);
             }
         }
         
         function isAnyMarkerVisible(checkpoint) {
-            const primaryMarker = document.querySelector(`#marker-${checkpoint}`);
-            const fallbackMarker = document.querySelector(`#marker-${checkpoint}-fallback`);
-            
-            return (primaryMarker && primaryMarker.object3D.visible) || 
-                   (fallbackMarker && fallbackMarker.object3D.visible);
+            try {
+                const primaryMarker = document.querySelector(`#marker-${checkpoint}`);
+                const fallbackMarker = document.querySelector(`#marker-${checkpoint}-fallback`);
+                
+                const primaryVisible = primaryMarker && primaryMarker.object3D && primaryMarker.object3D.visible;
+                const fallbackVisible = fallbackMarker && fallbackMarker.object3D && fallbackMarker.object3D.visible;
+                
+                const isVisible = primaryVisible || fallbackVisible;
+                console.log(`🔍 Checkpoint ${checkpoint} visibility: primary=${primaryVisible}, fallback=${fallbackVisible}, any=${isVisible}`);
+                
+                return isVisible;
+            } catch (error) {
+                console.error(`Error checking marker visibility for checkpoint ${checkpoint}:`, error);
+                return false;
+            }
         }
         
         function activateCheckpoint(checkpointNumber, isFallback = false) {
             console.log(`Activating checkpoint ${checkpointNumber}... (${isFallback ? 'fallback' : 'primary'} marker)`);
             
-            const state = GameState.getState();
+            let state = null;
+            let isGameStateAvailable = false;
             
-            // Check if checkpoint is unlocked
-            if (checkpointNumber > 1 && !state.checkpoints.includes(checkpointNumber - 1)) {
+            // Try to get game state with error handling
+            try {
+                if (GameState && typeof GameState.getState === 'function') {
+                    state = GameState.getState();
+                    if (state && typeof state === 'object') {
+                        isGameStateAvailable = true;
+                        console.log('GameState available:', state);
+                    } else {
+                        console.warn('GameState.getState() returned invalid data:', state);
+                    }
+                } else {
+                    console.warn('GameState not available or getState method missing');
+                }
+            } catch (error) {
+                console.error('Error accessing GameState:', error);
+                showError('Game state unavailable - continuing with basic AR functionality');
+            }
+            
+            // Fallback state when GameState is unavailable
+            if (!isGameStateAvailable) {
+                console.log('Using fallback state - all checkpoints accessible');
+                state = {
+                    checkpoints: [], // Empty array means no checkpoints completed
+                    keys: [],
+                    teamId: 'fallback',
+                    isGameComplete: false
+                };
+            }
+            
+            // Check if checkpoint is unlocked (only if GameState is available)
+            if (isGameStateAvailable && checkpointNumber > 1 && !state.checkpoints.includes(checkpointNumber - 1)) {
                 const message = `Checkpoint ${checkpointNumber} is locked! Complete previous checkpoints first.`;
                 console.warn(message);
                 showMessage(message);
                 return;
             }
             
-            // Check if already completed
-            if (state.checkpoints.includes(checkpointNumber)) {
+            // Check if already completed (only if GameState is available)
+            if (isGameStateAvailable && state.checkpoints.includes(checkpointNumber)) {
                 const message = `Checkpoint ${checkpointNumber} already completed!`;
                 console.log(message);
                 showMessage(message);
@@ -646,87 +1257,153 @@
             
             currentCheckpoint = checkpointNumber;
             
-            // Show appropriate checkpoint content (primary or fallback)
-            const contentId = isFallback ? 
-                `#checkpoint-${checkpointNumber}-fallback-content` : 
-                `#checkpoint-${checkpointNumber}-content`;
+            // Enhanced content visibility logic for both primary and fallback markers
+            let contentShown = false;
             
-            const content = document.querySelector(contentId);
-            if (content) {
-                content.setAttribute('visible', 'true');
-                console.log(`Checkpoint ${checkpointNumber} content made visible (${isFallback ? 'fallback' : 'primary'})`);
-            } else {
-                console.warn(`Checkpoint ${checkpointNumber} content element not found: ${contentId}`);
+            try {
+                // First, try to show the requested content type (primary or fallback)
+                const primaryContentId = `#checkpoint-${checkpointNumber}-content`;
+                const fallbackContentId = `#checkpoint-${checkpointNumber}-fallback-content`;
                 
-                // Try fallback content if primary not found
-                if (!isFallback) {
-                    const fallbackContent = document.querySelector(`#checkpoint-${checkpointNumber}-fallback-content`);
-                    if (fallbackContent) {
-                        fallbackContent.setAttribute('visible', 'true');
-                        console.log(`Using fallback content for checkpoint ${checkpointNumber}`);
+                const requestedContentId = isFallback ? fallbackContentId : primaryContentId;
+                const requestedContent = document.querySelector(requestedContentId);
+                
+                if (requestedContent) {
+                    // Hide all other content for this checkpoint first
+                    const allPrimaryContent = document.querySelector(primaryContentId);
+                    const allFallbackContent = document.querySelector(fallbackContentId);
+                    
+                    if (allPrimaryContent && allPrimaryContent !== requestedContent) {
+                        allPrimaryContent.setAttribute('visible', 'false');
+                    }
+                    if (allFallbackContent && allFallbackContent !== requestedContent) {
+                        allFallbackContent.setAttribute('visible', 'false');
+                    }
+                    
+                    // Show the requested content
+                    requestedContent.setAttribute('visible', 'true');
+                    contentShown = true;
+                    console.log(`✅ Checkpoint ${checkpointNumber} content displayed (${isFallback ? 'fallback' : 'primary'})`);
+                } else {
+                    console.warn(`❌ Requested content not found: ${requestedContentId}`);
+                    
+                    // Fallback logic: try the other content type
+                    const alternativeContentId = isFallback ? primaryContentId : fallbackContentId;
+                    const alternativeContent = document.querySelector(alternativeContentId);
+                    
+                    if (alternativeContent) {
+                        alternativeContent.setAttribute('visible', 'true');
+                        contentShown = true;
+                        console.log(`⚠️ Using alternative content for checkpoint ${checkpointNumber} (${!isFallback ? 'fallback' : 'primary'})`);
+                        showMessage(`Checkpoint ${checkpointNumber} loaded with alternative content`);
+                    } else {
+                        console.error(`❌ No content available for checkpoint ${checkpointNumber}`);
+                        showError(`Checkpoint ${checkpointNumber} content unavailable`);
                     }
                 }
+            } catch (error) {
+                console.error(`Error showing content for checkpoint ${checkpointNumber}:`, error);
+                showError(`Error displaying checkpoint ${checkpointNumber} content`);
             }
             
-            // Update UI
-            const markerType = isFallback ? ' (Fallback)' : '';
-            document.getElementById('ar-title').textContent = getCheckpointName(checkpointNumber) + markerType;
-            document.getElementById('current-checkpoint').textContent = `Checkpoint: ${checkpointNumber}${markerType}`;
-            
-            // Initialize minigame
+            // Update UI with enhanced error handling
             try {
-                initializeMinigame(checkpointNumber);
-                console.log(`Checkpoint ${checkpointNumber} activated successfully`);
-                showMessage(`Checkpoint ${checkpointNumber} activated! ${isFallback ? 'Using fallback marker.' : ''}`);
+                const markerType = isFallback ? ' (Fallback)' : '';
+                const gameStateStatus = isGameStateAvailable ? '' : ' [Offline Mode]';
+                
+                const titleElement = document.getElementById('ar-title');
+                const checkpointElement = document.getElementById('current-checkpoint');
+                
+                if (titleElement) {
+                    titleElement.textContent = getCheckpointName(checkpointNumber) + markerType + gameStateStatus;
+                }
+                if (checkpointElement) {
+                    checkpointElement.textContent = `Checkpoint: ${checkpointNumber}${markerType}${gameStateStatus}`;
+                }
             } catch (error) {
-                console.error(`Error initializing minigame for checkpoint ${checkpointNumber}:`, error);
-                showError('Error starting minigame. Please try scanning the marker again.');
+                console.error('Error updating UI:', error);
+            }
+            
+            // Initialize minigame with enhanced error handling
+            if (contentShown) {
+                try {
+                    initializeMinigame(checkpointNumber);
+                    console.log(`✅ Checkpoint ${checkpointNumber} activated successfully`);
+                    
+                    const statusMsg = isGameStateAvailable 
+                        ? `Checkpoint ${checkpointNumber} activated! ${isFallback ? 'Using fallback marker.' : ''}` 
+                        : `Checkpoint ${checkpointNumber} activated in offline mode! ${isFallback ? 'Using fallback marker.' : ''}`;
+                    showMessage(statusMsg);
+                } catch (error) {
+                    console.error(`❌ Error initializing minigame for checkpoint ${checkpointNumber}:`, error);
+                    showError(`Error starting minigame for checkpoint ${checkpointNumber}. Please try scanning the marker again.`);
+                }
+            } else {
+                console.error(`❌ Cannot initialize minigame - no content shown for checkpoint ${checkpointNumber}`);
+                showError(`Checkpoint ${checkpointNumber} content failed to load`);
             }
         }
         
         function deactivateCheckpoint() {
             if (currentCheckpoint) {
-                console.log(`Deactivating checkpoint ${currentCheckpoint}...`);
+                console.log(`🔄 Deactivating checkpoint ${currentCheckpoint}...`);
                 
-                // Hide both primary and fallback content
-                const primaryContent = document.querySelector(`#checkpoint-${currentCheckpoint}-content`);
-                const fallbackContent = document.querySelector(`#checkpoint-${currentCheckpoint}-fallback-content`);
-                
-                if (primaryContent) {
-                    primaryContent.setAttribute('visible', 'false');
-                }
-                if (fallbackContent) {
-                    fallbackContent.setAttribute('visible', 'false');
-                }
-                
-                // Re-enable both primary and fallback markers for future detection
-                const primaryMarker = document.querySelector(`#marker-${currentCheckpoint}`);
-                const fallbackMarker = document.querySelector(`#marker-${currentCheckpoint}-fallback`);
-                
-                if (primaryMarker) {
-                    primaryMarker.setAttribute('visible', 'true');
-                }
-                if (fallbackMarker) {
-                    fallbackMarker.setAttribute('visible', 'true');
-                }
-                
-                // Reset UI
-                document.getElementById('ar-title').textContent = 'Scan a Marker';
-                document.getElementById('current-checkpoint').textContent = 'Checkpoint: None';
-                document.getElementById('minigame-ui').style.display = 'none';
-                
-                // Cleanup minigame
-                if (currentMinigame) {
-                    try {
-                        currentMinigame.cleanup();
-                    } catch (error) {
-                        console.warn('Error cleaning up minigame:', error);
+                try {
+                    // Hide both primary and fallback content
+                    const primaryContent = document.querySelector(`#checkpoint-${currentCheckpoint}-content`);
+                    const fallbackContent = document.querySelector(`#checkpoint-${currentCheckpoint}-fallback-content`);
+                    
+                    if (primaryContent) {
+                        primaryContent.setAttribute('visible', 'false');
+                        console.log(`🔒 Hidden primary content for checkpoint ${currentCheckpoint}`);
                     }
-                    currentMinigame = null;
+                    if (fallbackContent) {
+                        fallbackContent.setAttribute('visible', 'false');
+                        console.log(`🔒 Hidden fallback content for checkpoint ${currentCheckpoint}`);
+                    }
+                    
+                    // Re-enable both primary and fallback markers for future detection
+                    showAllMarkersForCheckpoint(currentCheckpoint);
+                    
+                    // Reset UI with error handling
+                    try {
+                        const titleElement = document.getElementById('ar-title');
+                        const checkpointElement = document.getElementById('current-checkpoint');
+                        const minigameElement = document.getElementById('minigame-ui');
+                        
+                        if (titleElement) titleElement.textContent = 'Scan a Marker';
+                        if (checkpointElement) checkpointElement.textContent = 'Checkpoint: None';
+                        if (minigameElement) minigameElement.style.display = 'none';
+                    } catch (uiError) {
+                        console.error('Error resetting UI:', uiError);
+                    }
+                    
+                    // Cleanup minigame with enhanced error handling
+                    if (currentMinigame) {
+                        try {
+                            if (typeof currentMinigame.cleanup === 'function') {
+                                currentMinigame.cleanup();
+                                console.log(`🧹 Minigame cleanup completed for checkpoint ${currentCheckpoint}`);
+                            } else {
+                                console.log(`ℹ️ No cleanup method found for minigame ${currentCheckpoint}`);
+                            }
+                        } catch (error) {
+                            console.error(`❌ Error cleaning up minigame for checkpoint ${currentCheckpoint}:`, error);
+                        }
+                        currentMinigame = null;
+                    }
+                    
+                    console.log(`✅ Checkpoint ${currentCheckpoint} deactivated successfully`);
+                    const previousCheckpoint = currentCheckpoint;
+                    currentCheckpoint = null;
+                    showMessage(`Checkpoint ${previousCheckpoint} deactivated`);
+                    
+                } catch (error) {
+                    console.error(`❌ Error deactivating checkpoint ${currentCheckpoint}:`, error);
+                    showError(`Error deactivating checkpoint ${currentCheckpoint}`);
                 }
-                
-                console.log(`Checkpoint ${currentCheckpoint} deactivated`);
-                currentCheckpoint = null;
+            } else {
+                console.log('ℹ️ No checkpoint currently active to deactivate');
             }
         }
         
